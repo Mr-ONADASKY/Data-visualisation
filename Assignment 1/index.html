@@ -1,15 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Game visualisation</title>
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
+    <link rel="stylesheet" href="css/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="css/jquery-ui.theme.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="js/d3.v5.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
 </head>
+
 <body>
-    
+    <div class="overlay">
+        <button id="menu-button" class="ui-button ui-widget ui-corner-all ui-button-icon-only menu-button" title="Button with icon only">
+            <span class="ui-icon ui-icon-gear"></span> Button with icon only
+        </button>
+        <div class="box-container" id="dialog" title="Settings">
+            <div id="accordion">
+                <h3>Color Range Selection</h3>
+                <div>
+                    <div class="left-side color-slide-container">
+                        <div id="red-1" class="color-slider red-slider"></div>
+                        <div id="green-1" class="color-slider green-slider"></div>
+                        <div id="blue-1" class="color-slider blue-slider"></div>
+
+                        <div id="swatch-1" class="ui-widget-content ui-corner-all color-swatch"></div>
+                    </div>
+                    <div class="right-side color-slide-container">
+                        <div id="red-2" class="color-slider red-slider"></div>
+                        <div id="green-2" class="color-slider green-slider"></div>
+                        <div id="blue-2" class="color-slider blue-slider"></div>
+                        <div id="swatch-2" class="ui-widget-content ui-corner-all color-swatch"></div>
+                    </div>
+                </div>
+                <h3>Layout selection</h3>
+                <div>
+                        <div class="color-slide-container">
+                                <div id="red" class="color-slider red-slider"></div>
+                                <div id="green" class="color-slider green-slider"></div>
+                                <div id="blue" class="color-slider blue-slider"></div>
+                                <div id="swatch" class="ui-widget-content ui-corner-all color-swatch"></div>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="js/index.js"></script>
+<script src="js/d3-circle-packing.js"></script>
+
 </html>

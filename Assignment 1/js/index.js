@@ -1,6 +1,162 @@
 /*sources: https://bl.ocks.org/mbostock/7607535
-    dynamic web development 2017 1e zit, taak Nick Vanden Eynde (ikzelf ofc :p)
+    https://jqueryui.com
+    https://jquery.com/
 */
+
+var initialized = false; //check for avoiding an overide from the color settings to 0 when initializing the sliders
+
+var colorSetting = { //default color settings
+    "rangeStart": {
+        "red": 163,
+        "green": 0,
+        "blue": 0
+    },
+    "rangeStop": {
+        "red": 219,
+        "green": 39,
+        "blue": 15
+    },
+    "background": {
+        "red": 15,
+        "green": 15,
+        "blue": 15
+    }
+};
+
+//save the current color changes to the localstorage or read the user ones from the localstorage
+if (typeof (Storage) !== 'undefined') {
+    if (localStorage.getItem('colorSettings') == null) {
+        localStorage.setItem('colorSettings', JSON.stringify(colorSetting));
+    } else {
+        colorSetting = JSON.parse(localStorage.getItem('colorSettings'));
+    }
+}
+
+//execute some functions when the page is loaded
+$(function () {
+    //initialize the menu button and set a handler on it
+    $('#menu-button').on('click', displayDialog);
+
+    function displayDialog() {
+        // display the dialog
+        $("#dialog").dialog({
+            hide: {
+                effect: 'fold',
+                duration: 500
+            },
+            show: {
+                effect: 'fold',
+                duration: 500
+            },
+            width: 600,
+            modal: true,
+            open: function () {
+                $("#accordion").accordion();
+            },
+            close: function () {
+                localStorage.setItem('colorSettings', JSON.stringify(colorSetting));
+                drawCanvas();
+
+            }
+        });
+    };
+
+    //to convert rgb to hex values
+    function hexFromRGB(r, g, b) {
+        var hex = [
+            r.toString(16),
+            g.toString(16),
+            b.toString(16)
+        ];
+        $.each(hex, function (nr, val) {
+            if (val.length === 1) {
+                hex[nr] = "0" + val;
+            }
+        });
+        return hex.join("").toUpperCase();
+    }
+
+    //refresh the 1st swatch color if one of it slider values changes
+    function refreshLeftSwatch() {
+        var red = $("#red-1").slider("value"),
+            green = $("#green-1").slider("value"),
+            blue = $("#blue-1").slider("value"),
+            hex = hexFromRGB(red, green, blue);
+        if (initialized) {
+            colorSetting.rangeStart.red = red;
+            colorSetting.rangeStart.green = green;
+            colorSetting.rangeStart.blue = blue;
+        }
+        $("#swatch-1").css("background-color", "#" + hex);
+    }
+
+    //initialize the 1st swatch sliders
+    $("#red-1, #green-1, #blue-1").slider({
+        orientation: "horizontal",
+        range: "min",
+        max: 255,
+        slide: refreshLeftSwatch,
+        change: refreshLeftSwatch
+    });
+    //set the values to the 1st swatch sliders
+    $("#red-1").slider("value", colorSetting.rangeStart.red);
+    $("#green-1").slider("value", colorSetting.rangeStart.green);
+    $("#blue-1").slider("value", colorSetting.rangeStart.blue);
+
+    //refresh the 2nd swatch color if one of it slider values changes
+    function refreshRightSwatch() {
+        var red = $("#red-2").slider("value"),
+            green = $("#green-2").slider("value"),
+            blue = $("#blue-2").slider("value"),
+            hex = hexFromRGB(red, green, blue);
+        if (initialized) {
+            colorSetting.rangeStop.red = red;
+            colorSetting.rangeStop.green = green;
+            colorSetting.rangeStop.blue = blue;
+        }
+        $("#swatch-2").css("background-color", "#" + hex);
+    }
+    //initialize the 2nd swatch sliders
+    $("#red-2, #green-2, #blue-2").slider({
+        orientation: "horizontal",
+        range: "min",
+        max: 255,
+        slide: refreshRightSwatch,
+        change: refreshRightSwatch
+    });
+    //set the values to the 2nd swatch sliders
+    $("#red-2").slider("value", colorSetting.rangeStop.red);
+    $("#green-2").slider("value", colorSetting.rangeStop.green);
+    $("#blue-2").slider("value", colorSetting.rangeStop.blue);
+
+    //refresh the 3rd swatch color if one of it slider values changes
+    function refreshSwatch() {
+        var red = $("#red").slider("value"),
+            green = $("#green").slider("value"),
+            blue = $("#blue").slider("value"),
+            hex = hexFromRGB(red, green, blue);
+        if (initialized) {
+            colorSetting.background.red = red;
+            colorSetting.background.green = green;
+            colorSetting.background.blue = blue;
+        }
+        $("#swatch").css("background-color", "#" + hex);
+    }
+    //initialize the 3rd swatch sliders
+    $("#red, #green, #blue").slider({
+        orientation: "horizontal",
+        range: "min",
+        max: 255,
+        slide: refreshSwatch,
+        change: refreshSwatch
+    });
+    //set the values to the 3rd swatch sliders
+    $("#red").slider("value", colorSetting.background.red);
+    $("#green").slider("value", colorSetting.background.green);
+    $("#blue").slider("value", colorSetting.background.blue);
+
+    initialized = true;
+});
 
 //if the windows resizes, redraw the canvas
 d3.select(window).on('resize', drawCanvas);
@@ -9,52 +165,71 @@ d3.select(window).on('resize', drawCanvas);
 drawCanvas();
 
 //remove canvas when exists
-function removeCanvas(){
-    var svg =  d3.select('body').select('svg');
-    if(!svg.empty()){
+function removeCanvas() {
+    var svg = d3.select('body').select('svg');
+    if (!svg.empty()) {
         svg.remove();
     }
 }
 
 function stackByPlatform(array, key = 'platform') {
-     //default to 'platform' if platform key is not provided
+    //default to 'platform' if platform key is not provided
 
-    currentSortArray = [];
-    tempArray = [];
-    dataParsedArray = {'name': 'Game Sales', 'children': []};
-    
-    array.forEach(function(object){
-        if(!tempArray[object[key]]){
+    tempArray = []; //een tijdelijke tussen array 
+    dataParsedArray = { //de uiteindelijke array
+        'name': 'Game Sales',
+        'children': []
+    };
+
+    //check every object within the array and store it in an temporal array
+    array.forEach(function (object) {
+        if (!tempArray[object[key]]) {
             tempArray[object[key]] = [];
         }
         tempArray[object[key]].push(object);
     });
 
-    for(key in tempArray){
-        dataParsedArray.children.push({'name': key, children: tempArray[key]});
+    //load the data from the temporal array to convert it to it's final array
+    for (key in tempArray) {
+        dataParsedArray.children.push({
+            'name': key,
+            children: tempArray[key]
+        });
     }
     return dataParsedArray;
 }
 
-function stackByPublisher(array, key = 'publisher'){
+function stackByPublisher(array, key = 'publisher') {
     //default to 'publisher' if publisher key is not provided
 
     currentSortArray = [];
-    dataParsedArray = {'name': 'Game Sales', 'children': []};
-    
-    array.children.forEach(function(object){
+    dataParsedArray = {
+        'name': 'Game Sales',
+        'children': []
+    };
+
+    //check every object within the array and store it in an temporal array
+    array.children.forEach(function (object) {
         tempArray = [];
-        object.children.forEach(function(child){
-            if(!tempArray[child[key]]){
+        object.children.forEach(function (child) {
+            if (!tempArray[child[key]]) {
                 tempArray[child[key]] = [];
             }
             tempArray[child[key]].push(child);
         });
+        //convert the date from a 1st temporal array to a 2nd array
         var tempArray2 = [];
-        for(name in tempArray){
-            tempArray2.push({'name': name, children: tempArray[name]});
+        for (name in tempArray) {
+            tempArray2.push({
+                'name': name,
+                children: tempArray[name]
+            });
         }
-        dataParsedArray.children.push({'name': object.name, children: tempArray2});
+        //load the data from the temporal array to convert it to it's final array
+        dataParsedArray.children.push({
+            'name': object.name,
+            children: tempArray2
+        });
     });
     return dataParsedArray;
 }
@@ -65,185 +240,32 @@ function drawCanvas() {
     removeCanvas(); //remove canvas if exists
 
     var parseDate = d3.timeParse('%Y'); //the date object is in the csv a year
-    
+
     var parsedData = []; //array for storing the parsedData
-    d3.csv('data/vgsales.csv')
-        .then(function(data){
-            data.forEach(element => {
+    d3.csv('data/vgsales.csv') //load the csv data
+        .then(function (data) {
+            data.forEach(element => { //rearange the csv array data into a personal prefered format
                 var object = {
                     rank: Number(element.Rank),
-                name: element.Name,
-                platform: element.Platform,
-                year: parseDate(element.Year),
-                genre: element.Genre,
-                publisher: element.Publisher,
-                na_sales: Number(element.NA_Sales),
-                eu_sales: Number(element.EU_Sales),
-                jp_sales: Number(element.JP_Sales),
-                other_sales: Number(element.Other_sales),
-                global_sales: Number(element.Global_Sales)
+                    name: element.Name,
+                    platform: element.Platform,
+                    year: parseDate(element.Year),
+                    genre: element.Genre,
+                    publisher: element.Publisher,
+                    na_sales: Number(element.NA_Sales),
+                    eu_sales: Number(element.EU_Sales),
+                    jp_sales: Number(element.JP_Sales),
+                    other_sales: Number(element.Other_sales),
+                    global_sales: Number(element.Global_Sales)
                 };
-
                 parsedData.push(object);
             });
-           parsedData = stackByPlatform(parsedData);
-           parsedData = stackByPublisher(parsedData);
 
-            var testData = {
-                'name': 'Top game sales',
-                 'children': [
-                     {
-                        'name': 'Wii',
-                        'children': [
-                            {'name': 'Nintendo',
-                            'children': [
-                                {'name': 'Wii Sport', 'global_sales':82.74 },
-                                {'name': 'Mario kart', 'global_sales':35.82 }
-                            ]}
-                        ]
-                     },
-                     {
-                        'name': 'NES',
-                        'children': [
-                            {'name': 'Nintendo',
-                            'children': [
-                                {'name': 'Super mario bros', 'global_sales':40.24},
-                                {'name': 'Duck hunt', 'global_sales':28.31 }
-                            ]}
-                        ]
-                     },
-                     {
-                        'name': 'X360',
-                        'children': [
-                            {'name': 'Microsoft Game Studios',
-                            'children': [
-                                {'name': 'Kinnect', 'global_sales':21.82 },
-                                {'name': 'Call of Duty', 'global_sales':14.76 }
-                            ]}
-                        ]
-                     }
-                     
-                 ]
-            }
+            parsedData = stackByPlatform(parsedData); //stack the data by platform
+            parsedData = stackByPublisher(parsedData); //stack the data has been stacked by platform also bij Publisher
 
-            console.log(parsedData);
-            console.log(testData);
-
-            var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; //read the window width from the browser
-            var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; //read the window height from the browser
-
-            var margin = 40;
-
-            var svg = d3.select('body').append('svg').attr('width', width + 'px').attr('height', height + 'px');
-            
-            var diameter = Math.min(width,height);
-            var windowCenter = {
-                x: width / 2,
-                y: height / 2
-            }
-
-            var g = svg.append('g').attr('transform', 'translate(' + windowCenter.x + ',' + windowCenter.y + ')');
-
-            var color = d3.scaleLinear()
-                .domain([-1, 5])
-                .range(['hsl(152,80%,80%)', 'hsl(228,30%,40%)'])
-                .interpolate(d3.interpolateHcl);
-
-            var pack = d3.pack()
-                .size([diameter - margin, diameter - margin])
-                .padding(2);
-
-            var root = d3.hierarchy(parsedData)
-                .sum(function (d) {
-                    return d.global_sales;
-                })
-                .sort(function (a, b) {
-                    return b.value - a.value
-                });
-
-            var focus = root;
-            var nodes = pack(root).descendants();
-            var view;
-
-            var circle = g.selectAll('circle')
-                .data(nodes)
-                .enter().append('circle')
-                .attr('class', function (d) {
-                    return d.parent ? d.children ? 'node' : 'node node--leaf' : 'node node--root';
-                })
-                .style('fill', function (d) {
-                    return d.children ? color(d.depth) : null;
-                })
-                .on('click', function (d) {
-                    if (focus !== d) zoom(d), d3.event.stopPropagation();
-                });
-
-            var text = g.selectAll('text')
-                .data(nodes)
-                .enter().append('text')
-                .attr('class', 'label')
-                .style('fill-opacity', function (d) {
-                    return d.parent === root ? 1 : 0;
-                })
-                .style('display', function (d) {
-                    return d.parent === root ? 'inline' : 'none';
-                })
-                .text(function (d) {
-                    return d.data.name;
-                });
-
-            var node = g.selectAll('circle,text');
-
-            svg
-                .style('background', color(-1))
-                .on('click', function () {
-                    zoom(root);
-                });
-
-            zoomTo([root.x, root.y, root.r * 2 + margin]);
-
-            function zoom(d) {
-                var focus0 = focus;
-                focus = d;
-
-                var transition = d3.transition()
-                    .duration(d3.event.altKey ? 7500 : 750)
-                    .tween('zoom', function (d) {
-                        var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
-                        return function (t) {
-                            zoomTo(i(t));
-                        };
-                    });
-
-                transition.selectAll('text')
-                    .filter(function (d) {
-                        return d.parent === focus || this.style.display === 'inline';
-                    })
-                    .style('fill-opacity', function (d) {
-                        return d.parent === focus ? 1 : 0;
-                    })
-                    .on('start', function (d) {
-                        if (d.parent === focus) this.style.display = 'inline';
-                    })
-                    .on('end', function (d) {
-                        if (d.parent !== focus) this.style.display = 'none';
-                    });
-            }
-
-            function zoomTo(v) {
-                var k = diameter / v[2];
-                view = v;
-                node.attr('transform', function (d) {
-                    return 'translate(' + (d.x - v[0]) * k + ',' + (d.y - v[1]) * k + ')';
-                });
-                circle.attr('r', function (d) {
-                    return d.r * k;
-                });
-            }
+            drawCircle(parsedData, colorSetting); //call the drawcircle function, created by the great Mike Bostock with some extra juicy cherry's from my garden on top of that cake :p
 
         });
-
-
-
 
 }
