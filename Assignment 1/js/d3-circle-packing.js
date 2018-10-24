@@ -6,7 +6,7 @@ changes made by author ninjawulf98 aka Nick Vanden Eynde:
     background and colorrange can be changed
 */
 
-function drawCircle(parsedData, colorSetting ) {
+function drawCircle(parsedData, colorSetting) {
     var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; //read the window width from the browser
     var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; //read the window height from the browser
 
