@@ -10,7 +10,7 @@ know what the properties of my assignment are.
 
 1st assignement:
 
-A.1 exploratory \|\| A.2 Interactive \|\| A.x 3D
+A.1 exploratory \|\| A.2 Interactive \|\| A.x D3
 
 A visual representation about the the the top selling video games for each game
 console, with a subdivision based on their platform and their publisher. There
@@ -21,3 +21,15 @@ are also some options for changing the background as well as the stack colors.
 ![](media/d9d477439e98310d000c0a066907659c.png)
 
 ![](media/763e280030b7df8ee924392528ebd69a.png)
+
+
+
+2nd assignement:
+
+A. 1 exploratory || B Auditive || A.2 Interactive
+
+A simple audiovisual representation for the price movement for Bitcoin, Ethereum and Ripple
+
+
+
+TODO: A.1 explanatory || A.2 Static && A.2 Linear || A.x 3D && A.x Node-based
