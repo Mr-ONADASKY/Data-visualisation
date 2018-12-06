@@ -1,5 +1,5 @@
 /*
-  Source: minim examples
+  Source: minim examples, processing examples
   Data Source: https://coinmarketcap.com/
   
 */
@@ -24,7 +24,6 @@ color mainTextColor = color(255, 255, 255); // The color from the main text
 
 float frequencyTextX = WIDTH - 250, frequencyTextY = HEIGHT - 20, frequencyTextFontSize = 20; // The coordinates & size from the text in the main ui
 color frequencyTextColor = color(255, 255, 255); // The color from the main text
-
 
 int menuButtonX = 20, menuButtonY = 20, menuButtonWidth = 80, menuButtonHeight = 40, menuButtonTextSize = 20; // define the menu button x, y, size, height & textSize
 color menuButtonColor = color(240, 20, 15); // The menu button color 
@@ -64,6 +63,32 @@ Table currentTable; // 0: Bitcoin, 1: Ethereum, 2: Ripple
 float minFreq = 50; // The minimum sound frequency
 float maxFreq = 10000; // The maximum sound frequency
 
+HScrollbar minFreqBar, maxFreqBar;  // Initialize minimum & max frequencybar
+int minFreqBarX = 50, minFreqBarY = HEIGHT / 2 - 50, minFreqBarWidth = WIDTH - 200, minFreqBarHeight = 20;
+color minFreqBarColor = color(240, 45, 42), minFreqBarHandleColor = color(180, 35, 32), minFreqBarHandleLockColor = color(140, 25, 25);
+float minFreqBarMin = 10, minFreqBarMax = 5000; // Min & max frequency possible to set with minFreqbar
+
+int maxFreqBarX = 50, maxFreqBarY = HEIGHT / 2 + 50, maxFreqBarWidth = WIDTH - 200, maxFreqBarHeight = 20;
+color maxFreqBarColor = color(240, 45, 42), maxFreqBarHandleColor = color(180, 35, 32), maxFreqBarHandleLockColor = color(140, 25, 25);
+float maxFreqBarMin = 100, maxFreqBarMax = 20000; // Min & max frequency possible to set with maxFreqbar
+
+float minFreqBarTextX = 50, minFreqBarTextY = HEIGHT / 2 - 75, minFreqBarTextFontSize = 30; // The coordinates & size from the text in the minFreqBar ui
+color minFreqBarTextColor = color(255, 255, 255); // The color from the minFreqBar text
+
+float maxFreqBarTextX = 50, maxFreqBarTextY = HEIGHT / 2 + 25, maxFreqBarTextFontSize = 30; // The coordinates & size from the text in the minFreqBar ui
+color maxFreqBarTextColor = color(255, 255, 255); // The color from the minFreqBar text
+
+float menuTitleTextX = WIDTH / 2, menuTitleTextY = 50, menuTitleTextFontSize = 30; // The coordinates & size from the text in the main ui
+color menuTitleTextColor = color(255, 255, 255); // The color from the main text
+
+float menuVersionTextX = WIDTH - 250, menuVersionTextY = HEIGHT - 40, menuVersionTextFontSize = 20; // The coordinates & size from the text in the main ui
+color menuVersionTextColor = color(255, 255, 255); // The color from the main text
+String menuVersionText = "Version 1.4.1";
+
+float menuDeveloperTextX = WIDTH - 250, menuDeveloperTextY = HEIGHT - 10, menuDeveloperTextFontSize = 20; // The coordinates & size from the text in the main ui
+color menuDeveloperTextColor = color(255, 255, 255); // The color from the main text
+String menuDeveloperText = "Made by Ninjawulf98";
+
 // DO NO CHANGE !!!! TEMP GLOBAL VALUES!!!
 
 float maxCoinVal; // Global storage for the maximum coin value
@@ -73,6 +98,9 @@ String currentCoinName; // The name from the currentCoin;
 
 float currentFrequency; // The current frequency
 
+boolean pause = false;
+boolean mute = false;
+
 // Call once on program startup
 void setup()
 {
@@ -81,6 +109,9 @@ void setup()
    coin1 = loadTable("data/Bitcoin.csv", "header");
    coin2 = loadTable("data/Ethereum.csv", "header");
    coin3 = loadTable("data/Ripple.csv", "header");
+   
+   minFreqBar = new HScrollbar(minFreqBarX, minFreqBarY, minFreqBarWidth, minFreqBarHeight, 16, minFreqBarColor, minFreqBarHandleColor, minFreqBarHandleLockColor, minFreqBarMin, minFreqBarMax, minFreq);
+   maxFreqBar = new HScrollbar(maxFreqBarX, maxFreqBarY, maxFreqBarWidth, maxFreqBarHeight, 16, maxFreqBarColor, maxFreqBarHandleColor, maxFreqBarHandleLockColor, maxFreqBarMin, maxFreqBarMax, maxFreq);
    
    currentTable = coin1;
    currentCoinName = coin1Name;
@@ -97,6 +128,7 @@ void setup()
   wave = new Oscil( 440, 0.5f, Waves.SINE );
   // patch the Oscil to the output
   wave.patch( out );
+  
 }
 
 // Call on each frame
@@ -108,7 +140,7 @@ void draw()
     break;
      
     case 2:
-      drawMenu();
+      drawMenuUi();
     break;
     
     default: break;
@@ -118,30 +150,32 @@ void draw()
 
 // Draw the mainUI and call the necessary functions to do it
 void drawMainUI () {
-   background(0);
+  background(0);
   stroke(255);
   strokeWeight(1);
-
+ 
+ if(!pause) {
+   
   tableIndex++;
   if(tableIndex >= currentTable.getRowCount()){
       tableIndex = 0;
   }
+ }
   TableRow currentRow = currentTable.getRow(tableIndex);
   String date = currentRow.getString(tableDate);
   float price = currentRow.getFloat(tableCoinValue);
   
      drawMainUiWave(price);
-     drawMainUiTexts(date, price);
      drawMainUiButtons();
-  
+     drawMainUiTexts(date, price);
 }
 
 // Draw the main UI buttons
 void drawMainUiButtons() {
    drawButton(menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight, menuButtonColor, menuButtonHoverColor, menuButtonTextColor, menuButtonTextSize, "Menu", 1);
-   drawButton(coin1ButtonX, coin1ButtonY, coin1ButtonWidth, coin1ButtonHeight, coin1ButtonColor, coin1ButtonHoverColor, coin1ButtonTextColor, coin1ButtonTextSize, coin1Name, 2);
-   drawButton(coin2ButtonX, coin2ButtonY, coin2ButtonWidth, coin2ButtonHeight, coin2ButtonColor, coin2ButtonHoverColor, coin2ButtonTextColor, coin2ButtonTextSize, coin2Name, 3);
-   drawButton(coin3ButtonX, coin3ButtonY, coin3ButtonWidth, coin3ButtonHeight, coin3ButtonColor, coin3ButtonHoverColor, coin3ButtonTextColor, coin3ButtonTextSize, coin3Name, 4);
+   drawButton(coin1ButtonX, coin1ButtonY, coin1ButtonWidth, coin1ButtonHeight, coin1ButtonColor, coin1ButtonHoverColor, coin1ButtonTextColor, coin1ButtonTextSize, coin1Name, 3);
+   drawButton(coin2ButtonX, coin2ButtonY, coin2ButtonWidth, coin2ButtonHeight, coin2ButtonColor, coin2ButtonHoverColor, coin2ButtonTextColor, coin2ButtonTextSize, coin2Name, 4);
+   drawButton(coin3ButtonX, coin3ButtonY, coin3ButtonWidth, coin3ButtonHeight, coin3ButtonColor, coin3ButtonHoverColor, coin3ButtonTextColor, coin3ButtonTextSize, coin3Name, 5);
 }
 
 // Draw the texts in the main UI
@@ -193,9 +227,47 @@ void drawButton (int x, int y, int width, int height, color buttonColor, color b
   text(text, x + width / 2, y + height / 2);
 }
 
-// Draw the menu
-void drawMenu() {
+// Draw the menu and call all the necessary functions
+void drawMenuUi() {
+  background(0);
+  drawMenuButtons();
+  minFreq = minFreqBar.value;
+  maxFreq = maxFreqBar.value;
+  drawMenuText();
+}
+
+// Draw all the text in the menu
+void drawMenuText() {
+  textAlign(CENTER, CENTER);
+  fill(menuTitleTextColor);
+  textSize(menuTitleTextFontSize);
+  text("Menu", menuTitleTextX, menuTitleTextY);
   
+  textAlign(LEFT);
+  fill(minFreqBarTextColor);
+  textSize(minFreqBarTextFontSize);
+  text(minFreq, minFreqBarTextX, minFreqBarTextY);
+  
+  fill(maxFreqBarTextColor);
+  textSize(maxFreqBarTextFontSize);
+  text(maxFreq, maxFreqBarTextX, maxFreqBarTextY);
+  
+  fill(menuVersionTextColor);
+  textSize(menuVersionTextFontSize);
+  text(menuVersionText, menuVersionTextX, menuVersionTextY);
+  
+  fill(menuDeveloperTextColor);
+  textSize(menuDeveloperTextFontSize);
+  text(menuDeveloperText, menuDeveloperTextX, menuDeveloperTextY);
+}
+
+// Draw all the menu buttons
+void drawMenuButtons() {
+  drawButton(menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight, menuButtonColor, menuButtonHoverColor, menuButtonTextColor, menuButtonTextSize, "Exit", 2);
+  minFreqBar.update();
+  maxFreqBar.update();
+  minFreqBar.display();
+  maxFreqBar.display();
 }
 
 // Check if over the current button is hovered
@@ -236,19 +308,31 @@ float roundNumber (float number, int digits) {
 // Event handler for mouse button click
 void mouseClicked(){
   switch(currentHoverAction) {
+   case 1:
+     currentUi = 2;
+     wave.unpatch(out);
+   break;
+   
    case 2:
+     currentUi = 1;
+     if(!pause) {
+       wave.patch(out);
+     }
+    break;
+    
+   case 3:
      currentTable = coin1;
      currentCoinName = coin1Name;
      onTableChange();
    break;
    
-   case 3:
+   case 4:
      currentTable = coin2;
      currentCoinName = coin2Name;
      onTableChange();
    break;
    
-   case 4:
+   case 5:
      currentTable = coin3;
      currentCoinName = coin3Name;
      onTableChange();
@@ -265,6 +349,25 @@ void keyPressed()
 { 
   switch( key )
   {
+    case 'p':
+      pause = !pause;
+      if(pause) {
+        wave.unpatch( out ); 
+      } else {
+        wave.patch( out ); 
+      }
+        
+    break;
+     
+    case 'm':
+      mute = !mute;
+      if(mute) {
+        out.mute();
+      } else {
+        out.unmute();
+      }
+    break;
+    
     case '1': 
       wave.setWaveform( Waves.SINE );
       break;
@@ -288,3 +391,93 @@ void keyPressed()
     default: break; 
   }
   }
+  
+  // Straight from processing examples with some extra tweaks
+  
+  class HScrollbar {
+  int swidth, sheight;    // width and height of bar
+  float xpos, ypos;       // x and y position of bar
+  float spos, newspos;    // x position of slider
+  float sposMin, sposMax; // max and min values of slider
+  int loose;              // how loose/heavy
+  boolean over;           // is the mouse over the slider?
+  boolean locked;
+  float ratio;
+  color barColor, handleColor, clickedColor; // Bar & handleColor
+  float minVal, maxVal;
+  float value;
+  
+
+  
+    HScrollbar (float xp, float yp, int sw, int sh, int l, color bc, color hc, color c, float minv, float maxv, float v) {
+    swidth = sw;
+    sheight = sh;
+    int widthtoheight = sw - sh;
+    ratio = (float)sw / (float)widthtoheight;
+    xpos = xp;
+    ypos = yp-sheight/2;
+    sposMin = xpos;
+    sposMax = xpos + swidth - sheight;
+    spos = map(v, minv, maxv, sposMin, sposMax);
+    newspos = spos;
+    loose = l;
+    barColor = bc;
+    handleColor = hc;
+    clickedColor = c;
+    value = v;
+    minVal = minv;
+    maxVal = maxv;
+  }
+
+  void update() {
+    if (overEvent()) {
+      over = true;
+    } else {
+      over = false;
+    }
+    if (mousePressed && over) {
+      locked = true;
+    }
+    if (!mousePressed) {
+      locked = false;
+    }
+    if (locked) {
+      newspos = constrain(mouseX-sheight/2, sposMin, sposMax);
+      value = map(newspos, sposMin, sposMax, minVal, maxVal);
+    }
+    if (abs(newspos - spos) > 1) {
+      spos = spos + (newspos-spos)/loose;
+    }
+  }
+
+  float constrain(float val, float minv, float maxv) {
+    return min(max(val, minv), maxv);
+  }
+
+  boolean overEvent() {
+    if (mouseX > xpos && mouseX < xpos+swidth &&
+       mouseY > ypos && mouseY < ypos+sheight) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void display() {
+    noStroke();
+    fill(barColor);
+    rect(xpos, ypos, swidth, sheight);
+    if (over || locked) {
+      fill(0, 0, 0);
+    } else {
+      fill(handleColor);
+    }
+    rect(spos, ypos, sheight, sheight);
+  }
+
+  float getPos() {
+    // Convert spos to be values between
+    // 0 and the total width of the scrollbar
+    return spos * ratio;
+  }
+}
