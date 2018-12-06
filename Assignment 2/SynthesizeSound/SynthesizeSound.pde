@@ -66,11 +66,11 @@ float maxFreq = 10000; // The maximum sound frequency
 HScrollbar minFreqBar, maxFreqBar;  // Initialize minimum & max frequencybar
 int minFreqBarX = 50, minFreqBarY = HEIGHT / 2 - 50, minFreqBarWidth = WIDTH - 200, minFreqBarHeight = 20;
 color minFreqBarColor = color(240, 45, 42), minFreqBarHandleColor = color(180, 35, 32), minFreqBarHandleLockColor = color(140, 25, 25);
-float minFreqBarMin = 10, minFreqBarMax = 5000; // Min & max frequency possible to set with minFreqbar
+float minFreqBarMin = 10, minFreqBarMax = 20000; // Min & max frequency possible to set with minFreqbar
 
 int maxFreqBarX = 50, maxFreqBarY = HEIGHT / 2 + 50, maxFreqBarWidth = WIDTH - 200, maxFreqBarHeight = 20;
 color maxFreqBarColor = color(240, 45, 42), maxFreqBarHandleColor = color(180, 35, 32), maxFreqBarHandleLockColor = color(140, 25, 25);
-float maxFreqBarMin = 100, maxFreqBarMax = 20000; // Min & max frequency possible to set with maxFreqbar
+float maxFreqBarMin = 10, maxFreqBarMax = 20000; // Min & max frequency possible to set with maxFreqbar
 
 float minFreqBarTextX = 50, minFreqBarTextY = HEIGHT / 2 - 75, minFreqBarTextFontSize = 30; // The coordinates & size from the text in the minFreqBar ui
 color minFreqBarTextColor = color(255, 255, 255); // The color from the minFreqBar text
