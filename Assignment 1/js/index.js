@@ -55,7 +55,8 @@ $(function () {
             },
             close: function () {
                 localStorage.setItem('colorSettings', JSON.stringify(colorSetting));
-                drawCanvas();
+                // TODO: re-enable after demo
+                //drawCanvas();
 
             }
         });
@@ -159,7 +160,8 @@ $(function () {
 });
 
 //if the windows resizes, redraw the canvas
-d3.select(window).on('resize', drawCanvas);
+// TODO: re-enable after demo
+//d3.select(window).on('resize', drawCanvas);
 
 //call the function for drawing the canvas when the website loads
 drawCanvas();

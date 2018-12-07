@@ -25,24 +25,24 @@ color mainTextColor = color(255, 255, 255); // The color from the main text
 float frequencyTextX = WIDTH - 250, frequencyTextY = HEIGHT - 20, frequencyTextFontSize = 20; // The coordinates & size from the text in the main ui
 color frequencyTextColor = color(255, 255, 255); // The color from the main text
 
-int menuButtonX = 20, menuButtonY = 20, menuButtonWidth = 80, menuButtonHeight = 40, menuButtonTextSize = 20; // define the menu button x, y, size, height & textSize
+int menuButtonX = 50, menuButtonY = 30, menuButtonWidth = 80, menuButtonHeight = 40, menuButtonTextSize = 20; // define the menu button x, y, size, height & textSize
 color menuButtonColor = color(240, 20, 15); // The menu button color 
 color menuButtonHoverColor = color(150, 15, 10); // The menu button hover color
 color menuButtonTextColor = color(255, 255, 255); // The menu button text color
 
-int coin1ButtonX = WIDTH / 2 - 150, coin1ButtonY = HEIGHT - 50, coin1ButtonWidth = 80, coin1ButtonHeight = 40, coin1ButtonTextSize = 20; // define the first coin button x, y, size, height & textSize
+int coin1ButtonX = WIDTH / 2 - 150, coin1ButtonY = HEIGHT - 30, coin1ButtonWidth = 80, coin1ButtonHeight = 40, coin1ButtonTextSize = 20; // define the first coin button x, y, size, height & textSize
 color coin1ButtonColor = color(232, 151, 44); // The first coin button color 
 color coin1ButtonHoverColor = color(172, 111, 28); // The first coin button hover color
 color coin1ButtonTextColor = color(255, 255, 255); // The first coin button text color
 String coin1Name = "Bitcoin"; // The name from the first coin
 
-int coin2ButtonX = WIDTH / 2, coin2ButtonY = HEIGHT - 50, coin2ButtonWidth = 100, coin2ButtonHeight = 40, coin2ButtonTextSize = 20; // define the second coin button x, y, size, height & textSize
+int coin2ButtonX = WIDTH / 2, coin2ButtonY = HEIGHT - 30, coin2ButtonWidth = 100, coin2ButtonHeight = 40, coin2ButtonTextSize = 20; // define the second coin button x, y, size, height & textSize
 color coin2ButtonColor = color(92, 214, 255); // The second coin button color 
 color coin2ButtonHoverColor = color(62, 154, 185); // The second coin button hover color
 color coin2ButtonTextColor = color(255, 255, 255); // The second coin button text color
 String coin2Name = "Ethereum"; // The name from the second coin
 
-int coin3ButtonX = WIDTH / 2 + 150, coin3ButtonY = HEIGHT - 50, coin3ButtonWidth = 80, coin3ButtonHeight = 40, coin3ButtonTextSize = 20; // define the third coin button x, y, size, height & textSize
+int coin3ButtonX = WIDTH / 2 + 150, coin3ButtonY = HEIGHT - 30, coin3ButtonWidth = 80, coin3ButtonHeight = 40, coin3ButtonTextSize = 20; // define the third coin button x, y, size, height & textSize
 color coin3ButtonColor = color(107, 84, 255); // The third coin button color 
 color coin3ButtonHoverColor = color(69, 54, 165); // The third coin button hover color
 color coin3ButtonTextColor = color(255, 255, 255); // The third coin button text color
@@ -68,21 +68,60 @@ int playBarX = 50, playBarY = HEIGHT - 120, playBarWidth = WIDTH - 100, playBarH
 color playBarColor = color(240, 45, 42), playBarHandleColor = color(180, 35, 32), playBarHandleLockColor = color(140, 25, 25);
 float playBarMin, playBarMax; // Min & max frequency possible to set with minFreqbar
 
-int backwardsplayX = WIDTH / 2 - 50, backwardsPlayY = HEIGHT - 100, backwardsPlayWidth = 30, backwardsPlayHeight = 30; 
+int backwardsplayX = WIDTH / 2 - 50, backwardsPlayY = HEIGHT - 80, backwardsPlayWidth = 40, backwardsPlayHeight = 40; 
 color backwardsPlayFillColor = color(240, 45, 42), backwardsPlayHoverColor = color(180, 35, 32), backwardsPlaySymbolFillColor = color(255, 255, 255), backwardsPlaySymbolStrokeColor = color(255, 255, 255);
 float backwardsPlaySymbolStrokeWeight = 0, backwardsPlaySymbolSize = 1;
 int backwardsPlayHoverAction = 6, backwardsPlaySymbol = 1;
 
-int pauseX = WIDTH / 2, pauseY = HEIGHT - 100, pauseyWidth = 30, pauseHeight = 30; 
+int pauseX = WIDTH / 2, pauseY = HEIGHT - 80, pauseyWidth = 40, pauseHeight = 40; 
 color pauseFillColor = color(240, 45, 42), pauseHoverColor = color(180, 35, 32), pauseSymbolFillColor = color(255, 255, 255), pauseSymbolStrokeColor = color(255, 255, 255);
 float pauseSymbolStrokeWeight = 0, pauseSymbolSize = 1;
 int pauseHoverAction = 7, pauseSymbol = 2;
 
-int forwardsplayX = WIDTH / 2 + 50, forwardsPlayY = HEIGHT - 100, forwardsPlayWidth = 30, forwardsPlayHeight = 30; 
+int forwardsplayX = WIDTH / 2 + 50, forwardsPlayY = HEIGHT - 80, forwardsPlayWidth = 40, forwardsPlayHeight = 40; 
 color forwardsPlayFillColor = color(240, 45, 42), forwardsPlayHoverColor = color(180, 35, 32), forwardsPlaySymbolFillColor = color(255, 255, 255), forwardsPlaySymbolStrokeColor = color(255, 255, 255);
 float forwardsPlaySymbolStrokeWeight = 0, forwardsPlaySymbolSize = 1;
 int forwardsPlayHoverAction = 8, forwardsPlaySymbol = 3;
 
+int sinX = WIDTH / 2 - 350, sinY = HEIGHT - 80, sinWidth = 40, sinHeight = 40; 
+color sinFillColor = color(240, 45, 42), sinHoverColor = color(180, 35, 32), sinSymbolFillColor = color(255, 255, 255), sinSymbolStrokeColor = color(255, 255, 255);
+float sinSymbolStrokeWeight = 1, sinSymbolSize = 1;
+int sinHoverAction = 9, sinSymbol = 4;
+
+int triangleX = WIDTH / 2 - 300, triangleY = HEIGHT - 80, triangleWidth = 40, triangleHeight = 40; 
+color triangleFillColor = color(240, 45, 42), triangleHoverColor = color(180, 35, 32), triangleSymbolFillColor = color(255, 255, 255), triangleSymbolStrokeColor = color(255, 255, 255);
+float triangleSymbolStrokeWeight = 1, triangleSymbolSize = 1;
+int triangleHoverAction = 10, triangleSymbol = 5;
+
+int sawX = WIDTH / 2 - 250, sawY = HEIGHT - 80, sawWidth = 40, sawHeight = 40; 
+color sawFillColor = color(240, 45, 42), sawHoverColor = color(180, 35, 32), sawSymbolFillColor = color(255, 255, 255), sawSymbolStrokeColor = color(255, 255, 255);
+float sawSymbolStrokeWeight = 1, sawSymbolSize = 1;
+int sawHoverAction = 11, sawSymbol = 6;
+
+int squareX = WIDTH / 2 - 200, squareY = HEIGHT - 80, squareWidth = 40, squareHeight = 40; 
+color squareFillColor = color(240, 45, 42), squareHoverColor = color(180, 35, 32), squareSymbolFillColor = color(255, 255, 255), squareSymbolStrokeColor = color(255, 255, 255);
+float squareSymbolStrokeWeight = 1, squareSymbolSize = 1;
+int squareHoverAction = 12, squareSymbol = 7;
+
+int quarterPulseX = WIDTH / 2 - 150, quarterPulseY = HEIGHT - 80, quarterPulseWidth = 40, quarterPulseHeight = 40; 
+color quarterPulseFillColor = color(240, 45, 42), quarterPulseHoverColor = color(180, 35, 32), quarterPulseSymbolFillColor = color(255, 255, 255), quarterPulseSymbolStrokeColor = color(255, 255, 255);
+float quarterPulseSymbolStrokeWeight = 1, quarterPulseSymbolSize = 1;
+int quarterPulseHoverAction = 13, quarterPulseSymbol = 8;
+
+int muteX = WIDTH / 2 + 150, muteY = HEIGHT - 80, muteWidth = 40, muteHeight = 40; 
+color muteFillColor = color(240, 45, 42), muteHoverColor = color(180, 35, 32), muteSymbolFillColor = color(255, 255, 255), muteSymbolStrokeColor = color(255, 255, 255);
+float muteSymbolStrokeWeight = 1, muteSymbolSize = 1;
+int muteHoverAction = 14, muteSymbol = 9;
+
+int loopButtonX = WIDTH / 2 + 250, loopButtonY = HEIGHT - 80, loopButtonWidth = 80, loopButtonHeight = 40, loopButtonTextSize = 20, loopButtonHoverAction = 15; // define the loop button x, y, size, height & textSize
+color loopButtonColor = color(240, 20, 15); // The loop button color 
+color loopButtonHoverColor = color(150, 15, 10); // The loop button hover color
+color loopButtonTextColor = color(255, 255, 255); // The loop button text color
+
+int playbackSpeedButtonX = WIDTH / 2 + 350, playbackSpeedButtonY = HEIGHT - 80, playbackSpeedButtonWidth = 80, playbackSpeedButtonHeight = 40, playbackSpeedButtonTextSize = 20, playbackSpeedButtonHoverAction = 16; // define the playbackSpeed button x, y, size, height & textSize
+color playbackSpeedButtonColor = color(240, 20, 15); // The playbackSpeed button color 
+color playbackSpeedButtonHoverColor = color(150, 15, 10); // The playbackSpeed button hover color
+color playbackSpeedButtonTextColor = color(255, 255, 255); // The playbackSpeed button text color
 
 HScrollbar minFreqBar, maxFreqBar;  // Initialize minimum & max frequencybar
 int minFreqBarX = 50, minFreqBarY = HEIGHT / 2 - 50, minFreqBarWidth = WIDTH - 200, minFreqBarHeight = 20;
@@ -122,12 +161,16 @@ float currentFrequency; // The current frequency
 boolean pause = false;
 boolean forWardsPlay = true;
 boolean mute = false;
+boolean loop = true;
+float playBackSpeed = 1;
+String playbackSpeedString = "X 1";
+float pureTableIndex = 0;
 
 // Call once on program startup
 void setup()
 {
-   // Load the tables
-   
+  
+   // Load the tables  
    coin1 = loadTable("data/Bitcoin.csv", "header");
    coin2 = loadTable("data/Ethereum.csv", "header");
    coin3 = loadTable("data/Ripple.csv", "header");
@@ -182,14 +225,26 @@ void drawMainUI () {
  
  if(!pause) {
    if(forWardsPlay){
-    tableIndex++;
+    pureTableIndex += playBackSpeed;
+    tableIndex = round(pureTableIndex);
     if(tableIndex >= currentTable.getRowCount()){
-        tableIndex = 0;
+       pureTableIndex = 0;
+       tableIndex = round(pureTableIndex);
+       if (loop) {
+         pause = true;
+         wave.unpatch( out ); 
+      }
     }
    } else {
-     tableIndex--;
+     pureTableIndex -= playBackSpeed;
+     tableIndex = round(pureTableIndex);
     if(tableIndex < 0){
-        tableIndex = currentTable.getRowCount() - 1;
+      pureTableIndex = 0;
+        tableIndex = round(pureTableIndex);
+        if (loop) {
+         pause = true;
+         wave.unpatch( out ); 
+      }
     }
    }
  }
@@ -207,14 +262,24 @@ void drawMainUiButtons() {
    drawButton(coin1ButtonX, coin1ButtonY, coin1ButtonWidth, coin1ButtonHeight, coin1ButtonColor, coin1ButtonHoverColor, coin1ButtonTextColor, coin1ButtonTextSize, coin1Name, 3);
    drawButton(coin2ButtonX, coin2ButtonY, coin2ButtonWidth, coin2ButtonHeight, coin2ButtonColor, coin2ButtonHoverColor, coin2ButtonTextColor, coin2ButtonTextSize, coin2Name, 4);
    drawButton(coin3ButtonX, coin3ButtonY, coin3ButtonWidth, coin3ButtonHeight, coin3ButtonColor, coin3ButtonHoverColor, coin3ButtonTextColor, coin3ButtonTextSize, coin3Name, 5);
+   drawButton(playbackSpeedButtonX, playbackSpeedButtonY, playbackSpeedButtonWidth, playbackSpeedButtonHeight, playbackSpeedButtonColor, playbackSpeedButtonHoverColor, playbackSpeedButtonTextColor, playbackSpeedButtonTextSize, playbackSpeedString, playbackSpeedButtonHoverAction);
+   drawButton(loopButtonX, loopButtonY, loopButtonWidth, loopButtonHeight, loopButtonColor, loopButtonHoverColor, loopButtonTextColor, loopButtonTextSize, "Loop", loopButtonHoverAction);
+
    drawSymbolButton(backwardsplayX, backwardsPlayY, backwardsPlayWidth, backwardsPlayHeight, backwardsPlayFillColor, backwardsPlayHoverColor, backwardsPlaySymbolFillColor, backwardsPlaySymbolStrokeColor, backwardsPlaySymbolStrokeWeight, backwardsPlaySymbolSize, backwardsPlayHoverAction, backwardsPlaySymbol);
    drawSymbolButton(pauseX, pauseY, pauseyWidth, pauseHeight, pauseFillColor, pauseHoverColor, pauseSymbolFillColor, pauseSymbolStrokeColor, pauseSymbolStrokeWeight, pauseSymbolSize, pauseHoverAction, pauseSymbol);
    drawSymbolButton(forwardsplayX, forwardsPlayY, forwardsPlayWidth, forwardsPlayHeight, forwardsPlayFillColor, forwardsPlayHoverColor, forwardsPlaySymbolFillColor, forwardsPlaySymbolStrokeColor, forwardsPlaySymbolStrokeWeight, forwardsPlaySymbolSize, forwardsPlayHoverAction, forwardsPlaySymbol);
+   drawSymbolButton(sinX, sinY, sinWidth, sinHeight, sinFillColor, sinHoverColor, sinSymbolFillColor, sinSymbolStrokeColor, sinSymbolStrokeWeight, sinSymbolSize, sinHoverAction, sinSymbol);
+   drawSymbolButton(triangleX, triangleY, triangleWidth, triangleHeight, triangleFillColor, triangleHoverColor, triangleSymbolFillColor, triangleSymbolStrokeColor, triangleSymbolStrokeWeight, triangleSymbolSize, triangleHoverAction, triangleSymbol);
+   drawSymbolButton(sawX, sawY, sawWidth, sawHeight, sawFillColor, sawHoverColor, sawSymbolFillColor, sawSymbolStrokeColor, sawSymbolStrokeWeight, sawSymbolSize, sawHoverAction, sawSymbol);
+   drawSymbolButton(squareX, squareY, squareWidth, squareHeight, squareFillColor, squareHoverColor, squareSymbolFillColor, squareSymbolStrokeColor, squareSymbolStrokeWeight, squareSymbolSize, squareHoverAction, squareSymbol);
+   drawSymbolButton(quarterPulseX, quarterPulseY, quarterPulseWidth, quarterPulseHeight, quarterPulseFillColor, quarterPulseHoverColor, quarterPulseSymbolFillColor, quarterPulseSymbolStrokeColor, quarterPulseSymbolStrokeWeight, quarterPulseSymbolSize, quarterPulseHoverAction, quarterPulseSymbol);
+   drawSymbolButton(muteX, muteY, muteWidth, muteHeight, muteFillColor, muteHoverColor, muteSymbolFillColor, muteSymbolStrokeColor, muteSymbolStrokeWeight, muteSymbolSize, muteHoverAction, muteSymbol);
+
 
    if(!playBar.locked) {
-       playBar.updateValue(tableIndex);
+       playBar.updateValue(pureTableIndex);
    } else {
-    tableIndex = round(playBar.value); 
+    pureTableIndex = round(playBar.value); 
    }
    
    playBar.update();
@@ -251,6 +316,7 @@ void drawMainUiWave(float price) {
 
 // Draw a button with the given variableswith text
 void drawButton (int x, int y, int width, int height, color buttonColor, color buttonHoverColor, color textColor, int textSize, String text, int hoverAction) {
+  rectMode(CENTER);
   textAlign(CENTER, CENTER); 
   textSize(textSize);
   noStroke();
@@ -261,13 +327,13 @@ void drawButton (int x, int y, int width, int height, color buttonColor, color b
   } else {
     fill(buttonColor);
     if(currentHoverAction == hoverAction) {
-      hoverAction = 0;
+      currentHoverAction = 0;
     }
   }
   
   rect(x, y, width, height);
   fill(textColor);
-  text(text, x + width / 2, y + height / 2);
+  text(text, x, y);
 }
 
 // Draw a button with the given variables with a symbol
@@ -280,7 +346,7 @@ void drawSymbolButton (int x, int y, int width, int height, color buttonColor, c
   } else {
     fill(buttonColor);
     if(currentHoverAction == hoverAction) {
-      hoverAction = 0;
+      currentHoverAction = 0;
     }
   }
   rect(x, y, width, height);
@@ -289,17 +355,13 @@ void drawSymbolButton (int x, int y, int width, int height, color buttonColor, c
 
 // Draw a symbol
 void drawSymbol(int x, int y, int width, int height, float symbolSize, color fillColor, color strokeColor, float strokeWeight, int symbol) {
- int centerX;
- int centerY;
+ int centerX = x;
+ int centerY = y;
   switch(symbol) {
      case 1:
        strokeWeight(strokeWeight);
        stroke(strokeColor);
        fill(fillColor);
-       
-       centerX = x + width / 2;
-       centerY = y + height / 2;
-       
        triangle(centerX - 5 * symbolSize, centerY, centerX + 5 * symbolSize, centerY + 5 * symbolSize, centerX + 5 * symbolSize, centerY - 5 * symbolSize);
      break;
       
@@ -307,9 +369,6 @@ void drawSymbol(int x, int y, int width, int height, float symbolSize, color fil
        strokeWeight(strokeWeight);
        stroke(strokeColor);
        fill(fillColor);
-       
-       centerX = x + width / 2;
-       centerY = y + height / 2;
        
        quad(centerX - 6 * symbolSize, centerY + 5 * symbolSize, centerX - 2 * symbolSize, centerY + 5 * symbolSize, centerX - 2 * symbolSize, centerY - 5 * symbolSize, centerX - 6 * symbolSize, centerY - 5 * symbolSize);
        quad(centerX + 6 * symbolSize, centerY + 5 * symbolSize, centerX + 2 * symbolSize, centerY + 5 * symbolSize, centerX + 2 * symbolSize, centerY - 5 * symbolSize, centerX + 6 * symbolSize, centerY - 5 * symbolSize);
@@ -320,10 +379,85 @@ void drawSymbol(int x, int y, int width, int height, float symbolSize, color fil
        stroke(strokeColor);
        fill(fillColor);
        
-       centerX = x + width / 2;
-       centerY = y + height / 2;
-       
        triangle(centerX + 5 * symbolSize, centerY, centerX - 5 * symbolSize, centerY + 5 * symbolSize, centerX - 5 * symbolSize, centerY - 5 * symbolSize);
+     break;
+     
+     case 4:
+       strokeWeight(strokeWeight);
+       stroke(strokeColor);
+       noFill();
+     
+       for(float i = 0; i < TWO_PI; i += PI / 20.0) {
+         point(centerX + symbolSize * i * 20 / TWO_PI - symbolSize * 10, centerY + 5 * symbolSize *  sin(i));
+       }
+     break;
+     
+     case 5:
+       strokeWeight(strokeWeight);
+       stroke(strokeColor);
+       noFill();
+       beginShape();
+       vertex(centerX - 9 * symbolSize, centerY - 4 * symbolSize);
+       vertex(centerX - 3 * symbolSize, centerY + 4 * symbolSize);
+       vertex(centerX + 3 * symbolSize, centerY - 4 * symbolSize);
+       vertex(centerX + 9 * symbolSize, centerY + 4 * symbolSize);
+       endShape();
+     break;
+     
+     case 6:
+       strokeWeight(strokeWeight);
+       stroke(strokeColor);
+       noFill();
+       beginShape();
+       vertex(centerX - 9 * symbolSize, centerY - 4 * symbolSize);
+       vertex(centerX, centerY + 4 * symbolSize);
+       vertex(centerX, centerY - 4 * symbolSize);
+       vertex(centerX + 9 * symbolSize, centerY + 4 * symbolSize);
+       endShape();
+     break;
+     
+     case 7:
+       strokeWeight(strokeWeight);
+       stroke(strokeColor);
+       noFill();
+       beginShape();
+       vertex(centerX - 9 * symbolSize, centerY - 4 * symbolSize);
+       vertex(centerX - 9 * symbolSize, centerY + 4 * symbolSize);
+       vertex(centerX, centerY + 4 * symbolSize);
+       vertex(centerX, centerY - 4 * symbolSize);
+       vertex(centerX + 9 * symbolSize, centerY - 4 * symbolSize);
+       vertex(centerX + 9 * symbolSize, centerY + 4 * symbolSize);
+       endShape();
+     break;
+     
+     case 8:
+       strokeWeight(strokeWeight);
+       stroke(strokeColor);
+       noFill();
+       beginShape();
+       vertex(centerX - 12 * symbolSize, centerY - 4 * symbolSize);
+       vertex(centerX - 12 * symbolSize, centerY + 4 * symbolSize);
+       vertex(centerX - 6 * symbolSize, centerY + 4 * symbolSize);
+       vertex(centerX - 6 * symbolSize, centerY - 4 * symbolSize);
+       vertex(centerX + 6 * symbolSize, centerY - 4 * symbolSize);
+       vertex(centerX + 6 * symbolSize, centerY + 4 * symbolSize);
+       vertex(centerX + 12 * symbolSize, centerY + 4 * symbolSize);
+       vertex(centerX + 12 * symbolSize, centerY - 4 * symbolSize);
+       endShape();
+     break;
+     
+     case 9:
+       strokeWeight(strokeWeight);
+       stroke(strokeColor);
+       fill(fillColor);
+       beginShape();
+       vertex(centerX - 4 * symbolSize, centerY + 2 * symbolSize);
+       vertex(centerX - 4 * symbolSize, centerY - 2 * symbolSize);
+       vertex(centerX, centerY - 2 * symbolSize);
+       vertex(centerX + 4 * symbolSize, centerY - 6 * symbolSize);
+       vertex(centerX + 4 * symbolSize, centerY + 6 * symbolSize);
+       vertex(centerX, centerY + 2 * symbolSize);
+       endShape(CLOSE);
      break;
        
      default:
@@ -378,8 +512,8 @@ void drawMenuButtons() {
 
 // Check if over the current button is hovered
 boolean overButton(int x, int y, int width, int height)  {
-  if (mouseX >= x && mouseX <= x+width && 
-      mouseY >= y && mouseY <= y+height) {
+  if (mouseX >= x - width / 2 && mouseX <= x + width / 2 && 
+      mouseY >= y - width / 2 && mouseY <= y + height / 2) {
     return true;
   } else {
     return false;
@@ -476,160 +610,63 @@ void mouseClicked(){
      }
    break;
    
-   
-    
-   default:
+   case 9:
+     wave.setWaveform( Waves.SINE);
    break;
-  }
-}
-
-
-// Event handler for key press
-void keyPressed()
-{ 
-  switch( key )
-  {
-    case 'p':
-      pause = !pause;
-      if(pause) {
-        wave.unpatch( out ); 
-      } else {
-        wave.patch( out ); 
-      }
-        
-    break;
-     
-    case 'm':
-      mute = !mute;
+   
+   case 10:
+     wave.setWaveform( Waves.TRIANGLE);
+   break;
+   
+   case 11:
+     wave.setWaveform( Waves.SAW);
+   break;
+   
+   case 12:
+     wave.setWaveform( Waves.SQUARE);
+   break;
+   
+   case 13:
+     wave.setWaveform( Waves.QUARTERPULSE);
+   break;
+   
+   case 14:
+     mute = !mute;
       if(mute) {
         out.mute();
       } else {
         out.unmute();
       }
-    break;
-    
-    case '1': 
-      wave.setWaveform( Waves.SINE );
-      break;
-     
-    case '2':
-      wave.setWaveform( Waves.TRIANGLE );
-      break;
-     
-    case '3':
-      wave.setWaveform( Waves.SAW );
-      break;
-    
-    case '4':
-      wave.setWaveform( Waves.SQUARE );
-      break;
-      
-    case '5':
-      wave.setWaveform( Waves.QUARTERPULSE );
-      break;
-     
-    default: break; 
+   break;
+   
+   case 15:
+     loop = !loop;
+   break;
+   
+   case 16:
+     switchPlayBackSpeed();
+   break;
+   
+   default:
+   break;
   }
-  }
-  
-  // Straight from processing examples with some extra tweaks
-  
-  class HScrollbar {
-  int swidth, sheight;    // width and height of bar
-  float xpos, ypos;       // x and y position of bar
-  float spos, newspos;    // x position of slider
-  float sposMin, sposMax; // max and min values of slider
-  int loose;              // how loose/heavy
-  boolean over;           // is the mouse over the slider?
-  boolean locked;
-  float ratio;
-  color barColor, handleColor, clickedColor; // Bar & handleColor
-  float minVal, maxVal;
-  float value;
-  
+} 
 
-  
-    HScrollbar (float xp, float yp, int sw, int sh, int l, color bc, color hc, color c, float minv, float maxv, float v) {
-    swidth = sw;
-    sheight = sh;
-    int widthtoheight = sw - sh;
-    ratio = (float)sw / (float)widthtoheight;
-    xpos = xp;
-    ypos = yp-sheight/2;
-    sposMin = xpos;
-    sposMax = xpos + swidth - sheight;
-    spos = map(v, minv, maxv, sposMin, sposMax);
-    newspos = spos;
-    loose = l;
-    barColor = bc;
-    handleColor = hc;
-    clickedColor = c;
-    value = v;
-    minVal = minv;
-    maxVal = maxv;
-  }
-  
-  void updateValue(float v) {
-    value = v;
-    spos = map(v, minVal, maxVal, sposMin, sposMax);
-  }
-  
-  void updateBar(float minv, float maxv, float v) {
-    value = v;
-    minVal = minv;
-    maxVal = maxv;
-    spos = map(v, minv, maxv, sposMin, sposMax);
-  }
-
-  void update() {
-    if (overEvent()) {
-      over = true;
-    } else {
-      over = false;
-    }
-    if (mousePressed && over) {
-      locked = true;
-    }
-    if (!mousePressed) {
-      locked = false;
-    }
-    if (locked) {
-      newspos = constrain(mouseX-sheight/2, sposMin, sposMax);
-      value = map(newspos, sposMin, sposMax, minVal, maxVal);
-    }
-    if (abs(newspos - spos) > 1) {
-      spos = spos + (newspos-spos)/loose;
-    }
-  }
-
-  float constrain(float val, float minv, float maxv) {
-    return min(max(val, minv), maxv);
-  }
-
-  boolean overEvent() {
-    if (mouseX > xpos && mouseX < xpos+swidth &&
-       mouseY > ypos && mouseY < ypos+sheight) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void display() {
-    noStroke();
-    fill(barColor);
-    rect(xpos, ypos, swidth, sheight);
-    if (over || locked) {
-      fill(0, 0, 0);
-    } else {
-      fill(handleColor);
-    }
-    rect(spos, ypos, sheight, sheight);
-  }
-
-  float getPos() {
-    // Convert spos to be values between
-    // 0 and the total width of the scrollbar
-    return spos * ratio;
-  }
+void switchPlayBackSpeed() {
+   if(playBackSpeed == 1) {
+     playBackSpeed = 2;
+     playbackSpeedString = "X 2";
+   } else if(playBackSpeed == 2) {
+     playBackSpeed = 5;
+     playbackSpeedString = "X 5";
+   } else if(playBackSpeed == 5) {
+     playBackSpeed = .25;
+     playbackSpeedString = "X .25";
+   } else if(playBackSpeed == .25) {
+     playBackSpeed = .5;
+     playbackSpeedString = "X .5";
+   } else if(playBackSpeed == .5) {
+     playBackSpeed = 1;
+     playbackSpeedString = "X 1";
+   }
 }
