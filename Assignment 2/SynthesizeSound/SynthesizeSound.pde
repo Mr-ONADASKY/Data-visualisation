@@ -17,7 +17,7 @@ String tableDate = "Date", tableCoinValue = "Close**";
 
 int amplitude = 100; // The amplitude from the sine waves
 
-int waveYPosition = HEIGHT / 2; // The y position for the wave
+int waveYPosition = HEIGHT / 2 - 50; // The y position for the wave
 
 float mainTextX = 150, mainTextY = 50, mainTextFontSize = 30; // The coordinates & size from the text in the main ui
 color mainTextColor = color(255, 255, 255); // The color from the main text
@@ -63,6 +63,27 @@ Table currentTable; // 0: Bitcoin, 1: Ethereum, 2: Ripple
 float minFreq = 50; // The minimum sound frequency
 float maxFreq = 10000; // The maximum sound frequency
 
+HScrollbar playBar; // The play bar
+int playBarX = 50, playBarY = HEIGHT - 120, playBarWidth = WIDTH - 100, playBarHeight = 20;
+color playBarColor = color(240, 45, 42), playBarHandleColor = color(180, 35, 32), playBarHandleLockColor = color(140, 25, 25);
+float playBarMin, playBarMax; // Min & max frequency possible to set with minFreqbar
+
+int backwardsplayX = WIDTH / 2 - 50, backwardsPlayY = HEIGHT - 100, backwardsPlayWidth = 30, backwardsPlayHeight = 30; 
+color backwardsPlayFillColor = color(240, 45, 42), backwardsPlayHoverColor = color(180, 35, 32), backwardsPlaySymbolFillColor = color(255, 255, 255), backwardsPlaySymbolStrokeColor = color(255, 255, 255);
+float backwardsPlaySymbolStrokeWeight = 0, backwardsPlaySymbolSize = 1;
+int backwardsPlayHoverAction = 6, backwardsPlaySymbol = 1;
+
+int pauseX = WIDTH / 2, pauseY = HEIGHT - 100, pauseyWidth = 30, pauseHeight = 30; 
+color pauseFillColor = color(240, 45, 42), pauseHoverColor = color(180, 35, 32), pauseSymbolFillColor = color(255, 255, 255), pauseSymbolStrokeColor = color(255, 255, 255);
+float pauseSymbolStrokeWeight = 0, pauseSymbolSize = 1;
+int pauseHoverAction = 7, pauseSymbol = 2;
+
+int forwardsplayX = WIDTH / 2 + 50, forwardsPlayY = HEIGHT - 100, forwardsPlayWidth = 30, forwardsPlayHeight = 30; 
+color forwardsPlayFillColor = color(240, 45, 42), forwardsPlayHoverColor = color(180, 35, 32), forwardsPlaySymbolFillColor = color(255, 255, 255), forwardsPlaySymbolStrokeColor = color(255, 255, 255);
+float forwardsPlaySymbolStrokeWeight = 0, forwardsPlaySymbolSize = 1;
+int forwardsPlayHoverAction = 8, forwardsPlaySymbol = 3;
+
+
 HScrollbar minFreqBar, maxFreqBar;  // Initialize minimum & max frequencybar
 int minFreqBarX = 50, minFreqBarY = HEIGHT / 2 - 50, minFreqBarWidth = WIDTH - 200, minFreqBarHeight = 20;
 color minFreqBarColor = color(240, 45, 42), minFreqBarHandleColor = color(180, 35, 32), minFreqBarHandleLockColor = color(140, 25, 25);
@@ -99,6 +120,7 @@ String currentCoinName; // The name from the currentCoin;
 float currentFrequency; // The current frequency
 
 boolean pause = false;
+boolean forWardsPlay = true;
 boolean mute = false;
 
 // Call once on program startup
@@ -112,9 +134,13 @@ void setup()
    
    minFreqBar = new HScrollbar(minFreqBarX, minFreqBarY, minFreqBarWidth, minFreqBarHeight, 16, minFreqBarColor, minFreqBarHandleColor, minFreqBarHandleLockColor, minFreqBarMin, minFreqBarMax, minFreq);
    maxFreqBar = new HScrollbar(maxFreqBarX, maxFreqBarY, maxFreqBarWidth, maxFreqBarHeight, 16, maxFreqBarColor, maxFreqBarHandleColor, maxFreqBarHandleLockColor, maxFreqBarMin, maxFreqBarMax, maxFreq);
+
    
    currentTable = coin1;
    currentCoinName = coin1Name;
+   
+   playBar = new HScrollbar(playBarX, playBarY, playBarWidth, playBarHeight, 16, playBarColor, playBarHandleColor, playBarHandleLockColor, 0, currentTable.getRowCount(), 0);
+   
    onTableChange();
   
   size(1024, 400, P3D);
@@ -155,16 +181,21 @@ void drawMainUI () {
   strokeWeight(1);
  
  if(!pause) {
-   
-  tableIndex++;
-  if(tableIndex >= currentTable.getRowCount()){
-      tableIndex = 0;
-  }
+   if(forWardsPlay){
+    tableIndex++;
+    if(tableIndex >= currentTable.getRowCount()){
+        tableIndex = 0;
+    }
+   } else {
+     tableIndex--;
+    if(tableIndex < 0){
+        tableIndex = currentTable.getRowCount() - 1;
+    }
+   }
  }
   TableRow currentRow = currentTable.getRow(tableIndex);
   String date = currentRow.getString(tableDate);
   float price = currentRow.getFloat(tableCoinValue);
-  
      drawMainUiWave(price);
      drawMainUiButtons();
      drawMainUiTexts(date, price);
@@ -176,6 +207,18 @@ void drawMainUiButtons() {
    drawButton(coin1ButtonX, coin1ButtonY, coin1ButtonWidth, coin1ButtonHeight, coin1ButtonColor, coin1ButtonHoverColor, coin1ButtonTextColor, coin1ButtonTextSize, coin1Name, 3);
    drawButton(coin2ButtonX, coin2ButtonY, coin2ButtonWidth, coin2ButtonHeight, coin2ButtonColor, coin2ButtonHoverColor, coin2ButtonTextColor, coin2ButtonTextSize, coin2Name, 4);
    drawButton(coin3ButtonX, coin3ButtonY, coin3ButtonWidth, coin3ButtonHeight, coin3ButtonColor, coin3ButtonHoverColor, coin3ButtonTextColor, coin3ButtonTextSize, coin3Name, 5);
+   drawSymbolButton(backwardsplayX, backwardsPlayY, backwardsPlayWidth, backwardsPlayHeight, backwardsPlayFillColor, backwardsPlayHoverColor, backwardsPlaySymbolFillColor, backwardsPlaySymbolStrokeColor, backwardsPlaySymbolStrokeWeight, backwardsPlaySymbolSize, backwardsPlayHoverAction, backwardsPlaySymbol);
+   drawSymbolButton(pauseX, pauseY, pauseyWidth, pauseHeight, pauseFillColor, pauseHoverColor, pauseSymbolFillColor, pauseSymbolStrokeColor, pauseSymbolStrokeWeight, pauseSymbolSize, pauseHoverAction, pauseSymbol);
+   drawSymbolButton(forwardsplayX, forwardsPlayY, forwardsPlayWidth, forwardsPlayHeight, forwardsPlayFillColor, forwardsPlayHoverColor, forwardsPlaySymbolFillColor, forwardsPlaySymbolStrokeColor, forwardsPlaySymbolStrokeWeight, forwardsPlaySymbolSize, forwardsPlayHoverAction, forwardsPlaySymbol);
+
+   if(!playBar.locked) {
+       playBar.updateValue(tableIndex);
+   } else {
+    tableIndex = round(playBar.value); 
+   }
+   
+   playBar.update();
+   playBar.display();
 }
 
 // Draw the texts in the main UI
@@ -206,7 +249,7 @@ void drawMainUiWave(float price) {
 }
 
 
-// Draw a button with the given variables
+// Draw a button with the given variableswith text
 void drawButton (int x, int y, int width, int height, color buttonColor, color buttonHoverColor, color textColor, int textSize, String text, int hoverAction) {
   textAlign(CENTER, CENTER); 
   textSize(textSize);
@@ -225,6 +268,69 @@ void drawButton (int x, int y, int width, int height, color buttonColor, color b
   rect(x, y, width, height);
   fill(textColor);
   text(text, x + width / 2, y + height / 2);
+}
+
+// Draw a button with the given variables with a symbol
+void drawSymbolButton (int x, int y, int width, int height, color buttonColor, color buttonHoverColor, color symbolFillColor, color symbolStrokeColor, float symbolStrokeWeight, float symbolSize, int hoverAction, int symbols) {
+  noStroke();
+  
+  if(overButton(x, y, width, height)) {
+    fill(buttonHoverColor);
+    currentHoverAction = hoverAction;
+  } else {
+    fill(buttonColor);
+    if(currentHoverAction == hoverAction) {
+      hoverAction = 0;
+    }
+  }
+  rect(x, y, width, height);
+  drawSymbol(x, y, width, height, symbolSize, symbolFillColor, symbolStrokeColor, symbolStrokeWeight, symbols);
+}
+
+// Draw a symbol
+void drawSymbol(int x, int y, int width, int height, float symbolSize, color fillColor, color strokeColor, float strokeWeight, int symbol) {
+ int centerX;
+ int centerY;
+  switch(symbol) {
+     case 1:
+       strokeWeight(strokeWeight);
+       stroke(strokeColor);
+       fill(fillColor);
+       
+       centerX = x + width / 2;
+       centerY = y + height / 2;
+       
+       triangle(centerX - 5 * symbolSize, centerY, centerX + 5 * symbolSize, centerY + 5 * symbolSize, centerX + 5 * symbolSize, centerY - 5 * symbolSize);
+     break;
+      
+     case 2:
+       strokeWeight(strokeWeight);
+       stroke(strokeColor);
+       fill(fillColor);
+       
+       centerX = x + width / 2;
+       centerY = y + height / 2;
+       
+       quad(centerX - 6 * symbolSize, centerY + 5 * symbolSize, centerX - 2 * symbolSize, centerY + 5 * symbolSize, centerX - 2 * symbolSize, centerY - 5 * symbolSize, centerX - 6 * symbolSize, centerY - 5 * symbolSize);
+       quad(centerX + 6 * symbolSize, centerY + 5 * symbolSize, centerX + 2 * symbolSize, centerY + 5 * symbolSize, centerX + 2 * symbolSize, centerY - 5 * symbolSize, centerX + 6 * symbolSize, centerY - 5 * symbolSize);
+     break;
+     
+     case 3:
+       strokeWeight(strokeWeight);
+       stroke(strokeColor);
+       fill(fillColor);
+       
+       centerX = x + width / 2;
+       centerY = y + height / 2;
+       
+       triangle(centerX + 5 * symbolSize, centerY, centerX - 5 * symbolSize, centerY + 5 * symbolSize, centerX - 5 * symbolSize, centerY - 5 * symbolSize);
+     break;
+       
+     default:
+     break;
+    
+  }
+  
 }
 
 // Draw the menu and call all the necessary functions
@@ -285,6 +391,11 @@ void onTableChange() {
   tableIndex = 0;
   maxCoinVal = 0;
   minCoinVal = 0;
+  if(forWardsPlay){
+       playBar.updateBar(0, currentTable.getRowCount() - 1,0);
+     }else {
+       playBar.updateBar(0, currentTable.getRowCount() - 1, currentTable.getRowCount() - 1);
+     }
   for (TableRow currentRow : currentTable.rows()) {
     float price = currentRow.getFloat(tableCoinValue);
     if(minCoinVal > price || minCoinVal == 0) {
@@ -337,6 +448,35 @@ void mouseClicked(){
      currentCoinName = coin3Name;
      onTableChange();
    break;
+   
+   case 6:
+     forWardsPlay = false;
+     if(pause) {
+       pause = false;
+       wave.patch( out );
+     }
+     if(tableIndex == 0) {
+        tableIndex = currentTable.getRowCount() - 1; 
+     }
+   break;
+   
+   case 7:
+     pause = true;
+     wave.unpatch( out ); 
+   break;
+   
+   case 8:
+     forWardsPlay = true;
+     if(pause) {
+       pause = false;
+       wave.patch( out );
+     }
+     if(tableIndex >= currentTable.getRowCount() - 1) {
+       tableIndex = 0;
+     }
+   break;
+   
+   
     
    default:
    break;
@@ -427,6 +567,18 @@ void keyPressed()
     value = v;
     minVal = minv;
     maxVal = maxv;
+  }
+  
+  void updateValue(float v) {
+    value = v;
+    spos = map(v, minVal, maxVal, sposMin, sposMax);
+  }
+  
+  void updateBar(float minv, float maxv, float v) {
+    value = v;
+    minVal = minv;
+    maxVal = maxv;
+    spos = map(v, minv, maxv, sposMin, sposMax);
   }
 
   void update() {
