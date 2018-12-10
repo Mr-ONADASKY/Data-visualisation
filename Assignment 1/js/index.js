@@ -176,18 +176,25 @@ function stackByPlatform(array, key = 'platform') {
     //default to 'platform' if platform key is not provided
 
     tempArray = []; //een tijdelijke tussen array 
+    globalSales = 0 // For counting the total number of sales
     dataParsedArray = { //de uiteindelijke array
         'name': 'Game Sales',
+        'Global_Sales' : 0,
         'children': []
     };
+    
 
     //check every object within the array and store it in an temporal array
     array.forEach(function (object) {
+         !isNaN(object.global_sales) ? globalSales += object.global_sales : 0;
+         console.log(object.global_sales, globalSales);
         if (!tempArray[object[key]]) {
             tempArray[object[key]] = [];
         }
         tempArray[object[key]].push(object);
     });
+
+    dataParsedArray.global_sales = roundToNumber(globalSales);
 
     //load the data from the temporal array to convert it to it's final array
     for (key in tempArray) {
@@ -205,18 +212,22 @@ function stackByPublisher(array, key = 'publisher') {
     currentSortArray = [];
     dataParsedArray = {
         'name': 'Game Sales',
+        'Global_Sales' : array.global_sales,
         'children': []
     };
 
     //check every object within the array and store it in an temporal array
     array.children.forEach(function (object) {
         tempArray = [];
+        globalSales = 0;
         object.children.forEach(function (child) {
+            globalSales += child.global_sales;
             if (!tempArray[child[key]]) {
                 tempArray[child[key]] = [];
             }
             tempArray[child[key]].push(child);
         });
+        console.log(tempArray);
         //convert the date from a 1st temporal array to a 2nd array
         var tempArray2 = [];
         for (name in tempArray) {
@@ -225,11 +236,15 @@ function stackByPublisher(array, key = 'publisher') {
                 children: tempArray[name]
             });
         }
+
         //load the data from the temporal array to convert it to it's final array
         dataParsedArray.children.push({
             'name': object.name,
+            'Global_Sales': 42,
             children: tempArray2
         });
+
+        console.log(dataParsedArray);
     });
     return dataParsedArray;
 }
@@ -268,4 +283,9 @@ function drawCanvas() {
 
         });
 
+}
+
+function roundToNumber(number, amount) {
+    var tempNumber = Math.round(number * Math.pow(10, amount));
+    return tempNumber / Math.pow(10, amount);
 }
