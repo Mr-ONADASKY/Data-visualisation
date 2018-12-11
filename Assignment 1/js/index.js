@@ -20,8 +20,8 @@ var colorSetting = { //default color settings
         "blue": 15
     },
     "rangeEnd": {
-        "red": 255,
-        "green": 255,
+        "red": 100,
+        "green": 185,
         "blue": 255
     },
     "background": {
@@ -311,9 +311,7 @@ function drawCanvas() {
             });
 
             parsedData = stackByPlatform(parsedData); //stack the data by platform
-            console.log(parsedData);
             parsedData = stackByPublisher(parsedData); //stack the data has been stacked by platform also bij Publisher
-            console.log(parsedData);
 
             drawCircle(parsedData, colorSetting); //call the drawcircle function, created by the great Mike Bostock with some extra juicy cherry's from my garden on top of that cake :p
 

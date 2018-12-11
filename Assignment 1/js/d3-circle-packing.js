@@ -50,7 +50,6 @@ function drawCircle(parsedData, colorSetting) {
     var focus = root;
     var nodes = pack(root).descendants();
     var view;
-
     var circle = g.selectAll('circle')
         .data(nodes)
         .enter().append('circle')
@@ -58,7 +57,7 @@ function drawCircle(parsedData, colorSetting) {
             return d.parent ? 'node' : 'node node--root';
         })
         .style('fill', function (d) {
-            return d.children ? color(d.depth) : color(colorSetting.rangeEnd.red, colorSetting.rangeEnd.blue, colorSetting.rangeEnd.green);
+            return d.children ? color(d.depth) : 'rgb(' + colorSetting.rangeEnd.red + ',' + colorSetting.rangeEnd.green + ',' + colorSetting.rangeEnd.blue + ')';
         })
         .on('click', function (d) {
             if (focus !== d) zoom(d), d3.event.stopPropagation();
@@ -156,7 +155,6 @@ function drawCircle(parsedData, colorSetting) {
         .style('background', d3.rgb(colorSetting.background.red, colorSetting.background.green, colorSetting.background.blue))
 
     function getCurrentFocusedObject(data) {
-        console.log(data.data.name, data);
         $('.title').html('Title: ' + data.data.name);
         $('.publisher').html('Publisher: ' + (data.data.publisher != undefined? data.data.publisher: ''));
         $('.platform').html('Platform: ' + (data.data.platform != undefined? data.data.platform: ''));
@@ -173,7 +171,6 @@ function drawCircle(parsedData, colorSetting) {
     function zoom(d) {
         var focus0 = focus;
         focus = d;
-        console.log(focus.data.name);
 
         var transition = d3.transition()
             .duration(d3.event.altKey ? 7500 : 750)
