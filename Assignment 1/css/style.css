@@ -78,10 +78,14 @@ body {
   border-color: #729fcf;
 }
 
-.right-side.color-slide-container {
+.start-color.color-slide-container {
   margin: 50px 0 20px 0;
 }
 
 .color-slide-container h3{
   margin: 10px;
+}
+
+.color-slide-container {
+  height: 200px;
 }

@@ -51,16 +51,14 @@ function drawCircle(parsedData, colorSetting) {
     var nodes = pack(root).descendants();
     var view;
 
-    console.log(nodes);
-    
     var circle = g.selectAll('circle')
         .data(nodes)
         .enter().append('circle')
         .attr('class', function (d) {
-            return d.parent ? d.children ? 'node' : 'node node--leaf' : 'node node--root';
+            return d.parent ? 'node' : 'node node--root';
         })
         .style('fill', function (d) {
-            return d.children ? color(d.depth) : null;
+            return d.children ? color(d.depth) : color(colorSetting.rangeEnd.red, colorSetting.rangeEnd.blue, colorSetting.rangeEnd.green);
         })
         .on('click', function (d) {
             if (focus !== d) zoom(d), d3.event.stopPropagation();
@@ -75,30 +73,75 @@ function drawCircle(parsedData, colorSetting) {
         .attr('font-size', 30)
         .text('Global Game Sales');
     
+    
+// add all text boxes for data info
     var text = textContainer.append('text')
                             .attr('x', 50)
                             .attr('fill', 'white')
                             .attr('font-family', 'Helvetica,Arial,sans-serif');      
-    
+
     text.append('tspan') 
         .attr('x', 0)
         .attr('dy', '1.2em')
         .attr('class', 'title')
-        .attr('font-size', 30)
+        .attr('font-size', 25)
         .text('Title: ');
 
     text.append('tspan') 
         .attr('x', 0)
         .attr('dy', '1.2em')
-        .attr('font-size', 25)
-        .text('Global Sales (millions):');
+        .attr('class', 'publisher')
+        .attr('font-size', 20)
+        .text('Publisher: ');
     
     text.append('tspan') 
         .attr('x', 0)
         .attr('dy', '1.2em')
-        .attr('font-size', 25)
-        .text('This \n is \n a \n test!');    
+        .attr('class', 'platform')
+        .attr('font-size', 20)
+        .text('Platform: '); 
+        
+    text.append('tspan') 
+        .attr('x', 0)
+        .attr('dy', '1.2em')
+        .attr('class', 'genre')
+        .attr('font-size', 20)
+        .text('Genre: ');
 
+    text.append('tspan') 
+        .attr('x', 0)
+        .attr('dy', '1.2em')
+        .attr('class', 'global-sales')
+        .attr('font-size', 20)
+        .text('Global Sales (millions):');
+
+    text.append('tspan') 
+        .attr('x', 0)
+        .attr('dy', '1.2em')
+        .attr('class', 'eu-sales')
+        .attr('font-size', 20)
+        .text('Europe Sales (millions):');
+
+    text.append('tspan') 
+        .attr('x', 0)
+        .attr('dy', '1.2em')
+        .attr('class', 'na-sales')
+        .attr('font-size', 20)
+        .text('North American Sales (millions):');
+
+    text.append('tspan') 
+        .attr('x', 0)
+        .attr('dy', '1.2em')
+        .attr('class', 'jp-sales')
+        .attr('font-size', 20)
+        .text('Japan Sales (millions):');
+
+    text.append('tspan') 
+        .attr('x', 0)
+        .attr('dy', '1.2em')
+        .attr('class', 'other-sales')
+        .attr('font-size', 20)
+        .text('Other Sales (millions):');
         
 
     var node = g.selectAll('circle');
@@ -112,10 +155,18 @@ function drawCircle(parsedData, colorSetting) {
         svg
         .style('background', d3.rgb(colorSetting.background.red, colorSetting.background.green, colorSetting.background.blue))
 
-        function getCurrentFocusedObject(data) {
-            console.log(data.data.name, data);
-            $('.title').html('Title: ' + data.data.name);
-        }
+    function getCurrentFocusedObject(data) {
+        console.log(data.data.name, data);
+        $('.title').html('Title: ' + data.data.name);
+        $('.publisher').html('Publisher: ' + (data.data.publisher != undefined? data.data.publisher: ''));
+        $('.platform').html('Platform: ' + (data.data.platform != undefined? data.data.platform: ''));
+        $('.genre').html('Genre: ' + (data.data.genre != undefined? data.data.genre: ''));
+        $('.global-sales').html('Global Sales (millions): ' + (data.data.global_sales != undefined? roundToNumber(data.data.global_sales): ''));
+        $('.eu-sales').html('Europe Sales (millions): ' + (data.data.eu_sales != undefined? roundToNumber(data.data.eu_sales): ''));
+        $('.na-sales').html('North American Sales (millions): ' + (data.data.na_sales != undefined? roundToNumber(data.data.na_sales): ''));
+        $('.jp-sales').html('Japan Sales (millions): ' + (data.data.jp_sales != undefined? roundToNumber(data.data.jp_sales): ''));
+        $('.other-sales').html('Other Sales (millions): ' + (data.data.other_sales != undefined? roundToNumber(data.data.other_sales): ''));
+    }
 
     zoomTo([root.x, root.y, root.r * 2 + margin]);
 

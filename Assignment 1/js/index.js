@@ -1,6 +1,9 @@
 /*sources: https://bl.ocks.org/mbostock/7607535
     https://jqueryui.com
     https://jquery.com/
+
+    data:
+    https://www.kaggle.com/gregorut/videogamesales/version/2
 */
 
 var initialized = false; //check for avoiding an overide from the color settings to 0 when initializing the sliders
@@ -15,6 +18,11 @@ var colorSetting = { //default color settings
         "red": 219,
         "green": 39,
         "blue": 15
+    },
+    "rangeEnd": {
+        "red": 255,
+        "green": 255,
+        "blue": 255
     },
     "background": {
         "red": 15,
@@ -77,7 +85,7 @@ $(function () {
     }
 
     //refresh the 1st swatch color if one of it slider values changes
-    function refreshLeftSwatch() {
+    function refreshStartColorSwatch() {
         var red = $("#red-1").slider("value"),
             green = $("#green-1").slider("value"),
             blue = $("#blue-1").slider("value"),
@@ -95,8 +103,8 @@ $(function () {
         orientation: "horizontal",
         range: "min",
         max: 255,
-        slide: refreshLeftSwatch,
-        change: refreshLeftSwatch
+        slide: refreshStartColorSwatch,
+        change: refreshStartColorSwatch
     });
     //set the values to the 1st swatch sliders
     $("#red-1").slider("value", colorSetting.rangeStart.red);
@@ -104,7 +112,7 @@ $(function () {
     $("#blue-1").slider("value", colorSetting.rangeStart.blue);
 
     //refresh the 2nd swatch color if one of it slider values changes
-    function refreshRightSwatch() {
+    function refreshStopColorSwatch() {
         var red = $("#red-2").slider("value"),
             green = $("#green-2").slider("value"),
             blue = $("#blue-2").slider("value"),
@@ -121,13 +129,38 @@ $(function () {
         orientation: "horizontal",
         range: "min",
         max: 255,
-        slide: refreshRightSwatch,
-        change: refreshRightSwatch
+        slide: refreshStopColorSwatch,
+        change: refreshStopColorSwatch
     });
     //set the values to the 2nd swatch sliders
     $("#red-2").slider("value", colorSetting.rangeStop.red);
     $("#green-2").slider("value", colorSetting.rangeStop.green);
     $("#blue-2").slider("value", colorSetting.rangeStop.blue);
+
+    function refreshEndColorSwatch() {
+        var red = $("#red-3").slider("value"),
+            green = $("#green-3").slider("value"),
+            blue = $("#blue-3").slider("value"),
+            hex = hexFromRGB(red, green, blue);
+        if (initialized) {
+            colorSetting.rangeEnd.red = red;
+            colorSetting.rangeEnd.green = green;
+            colorSetting.rangeEnd.blue = blue;
+        }
+        $("#swatch-3").css("background-color", "#" + hex);
+    }
+    //initialize the 2nd swatch sliders
+    $("#red-3, #green-3, #blue-3").slider({
+        orientation: "horizontal",
+        range: "min",
+        max: 255,
+        slide: refreshEndColorSwatch,
+        change: refreshEndColorSwatch
+    });
+    //set the values to the 2nd swatch sliders
+    $("#red-3").slider("value", colorSetting.rangeEnd.red);
+    $("#green-3").slider("value", colorSetting.rangeEnd.green);
+    $("#blue-3").slider("value", colorSetting.rangeEnd.blue);
 
     //refresh the 3rd swatch color if one of it slider values changes
     function refreshSwatch() {
@@ -179,7 +212,6 @@ function stackByPlatform(array, key = 'platform') {
     globalSales = 0 // For counting the total number of sales
     dataParsedArray = { //de uiteindelijke array
         'name': 'Game Sales',
-        'Global_Sales' : 0,
         'children': []
     };
     
@@ -187,19 +219,17 @@ function stackByPlatform(array, key = 'platform') {
     //check every object within the array and store it in an temporal array
     array.forEach(function (object) {
          !isNaN(object.global_sales) ? globalSales += object.global_sales : 0;
-         console.log(object.global_sales, globalSales);
         if (!tempArray[object[key]]) {
             tempArray[object[key]] = [];
         }
         tempArray[object[key]].push(object);
     });
-
     dataParsedArray.global_sales = roundToNumber(globalSales);
 
     //load the data from the temporal array to convert it to it's final array
     for (key in tempArray) {
         dataParsedArray.children.push({
-            'name': key,
+            name: key,
             children: tempArray[key]
         });
     }
@@ -211,9 +241,9 @@ function stackByPublisher(array, key = 'publisher') {
 
     currentSortArray = [];
     dataParsedArray = {
-        'name': 'Game Sales',
-        'Global_Sales' : array.global_sales,
-        'children': []
+        name: 'Game Sales',
+        global_sales : array.global_sales,
+        children: []
     };
 
     //check every object within the array and store it in an temporal array
@@ -227,24 +257,28 @@ function stackByPublisher(array, key = 'publisher') {
             }
             tempArray[child[key]].push(child);
         });
-        console.log(tempArray);
         //convert the date from a 1st temporal array to a 2nd array
         var tempArray2 = [];
         for (name in tempArray) {
+            publisherGlobalSales = 0;
+
+            tempArray[name].forEach((game) => {
+                !isNaN(game.global_sales) ? publisherGlobalSales += game.global_sales : 0;
+            });
+
             tempArray2.push({
-                'name': name,
+                name: name,
+                global_sales: publisherGlobalSales,
                 children: tempArray[name]
             });
         }
 
         //load the data from the temporal array to convert it to it's final array
         dataParsedArray.children.push({
-            'name': object.name,
-            'Global_Sales': 42,
+            name: object.name,
+            global_sales: roundToNumber(globalSales),
             children: tempArray2
         });
-
-        console.log(dataParsedArray);
     });
     return dataParsedArray;
 }
@@ -270,14 +304,16 @@ function drawCanvas() {
                     na_sales: Number(element.NA_Sales),
                     eu_sales: Number(element.EU_Sales),
                     jp_sales: Number(element.JP_Sales),
-                    other_sales: Number(element.Other_sales),
+                    other_sales: Number(element.Other_Sales),
                     global_sales: Number(element.Global_Sales)
                 };
                 parsedData.push(object);
             });
 
             parsedData = stackByPlatform(parsedData); //stack the data by platform
+            console.log(parsedData);
             parsedData = stackByPublisher(parsedData); //stack the data has been stacked by platform also bij Publisher
+            console.log(parsedData);
 
             drawCircle(parsedData, colorSetting); //call the drawcircle function, created by the great Mike Bostock with some extra juicy cherry's from my garden on top of that cake :p
 
@@ -285,7 +321,8 @@ function drawCanvas() {
 
 }
 
-function roundToNumber(number, amount) {
+// Round to a certain amount of numbers behind the comma, default: 2
+function roundToNumber(number, amount = 2) { 
     var tempNumber = Math.round(number * Math.pow(10, amount));
     return tempNumber / Math.pow(10, amount);
 }
