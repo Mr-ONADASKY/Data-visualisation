@@ -28,8 +28,14 @@ var colorSetting = { //default color settings
         "red": 15,
         "green": 15,
         "blue": 15
+    },
+    "data": {
+        'type': 'global-simple',
+        'console': ''
     }
 };
+
+var consoles = [];
 
 //save the current color changes to the localstorage or read the user ones from the localstorage
 if (typeof (Storage) !== 'undefined') {
@@ -208,12 +214,17 @@ function removeCanvas() {
 function stackByPlatform(array, key = 'platform') {
     //default to 'platform' if platform key is not provided
 
+    if(consoles.length > 0) {
+        consoles = [];
+        }
+
     tempArray = []; //een tijdelijke tussen array 
     globalSales = 0 // For counting the total number of sales
     dataParsedArray = { //de uiteindelijke array
         'name': 'Game Sales',
         'children': []
     };
+
     
 
     //check every object within the array and store it in an temporal array
@@ -232,6 +243,7 @@ function stackByPlatform(array, key = 'platform') {
             name: key,
             children: tempArray[key]
         });
+        consoles.push(key);
     }
     return dataParsedArray;
 }
@@ -250,8 +262,18 @@ function stackByPublisher(array, key = 'publisher') {
     array.children.forEach(function (object) {
         tempArray = [];
         globalSales = 0;
+        europeSales = 0;
+        northAmericanSales = 0;
+        japanSales = 0;
+        otherSales = 0;
+
         object.children.forEach(function (child) {
             globalSales += child.global_sales;
+            europeSales += child.eu_sales;
+            northAmericanSales += child.na_sales;
+            japanSales += child.jp_sales;
+            otherSales += child.other_sales;
+
             if (!tempArray[child[key]]) {
                 tempArray[child[key]] = [];
             }
@@ -261,14 +283,136 @@ function stackByPublisher(array, key = 'publisher') {
         var tempArray2 = [];
         for (name in tempArray) {
             publisherGlobalSales = 0;
+            publisherEuropeSales = 0;
+            publisherNorthAmericanSales = 0;
+            publisherJapanSales = 0;
+            publisherOtherSales = 0;
 
             tempArray[name].forEach((game) => {
                 !isNaN(game.global_sales) ? publisherGlobalSales += game.global_sales : 0;
+                !isNaN(game.eu_sales) ? publisherEuropeSales += game.eu_sales : 0;
+                !isNaN(game.na_sales) ? publisherNorthAmericanSales += game.na_sales : 0;
+                !isNaN(game.jp_sales) ? publisherJapanSales += game.jp_sales : 0;
+                !isNaN(game.other_sales) ? publisherOtherSales += game.other_sales : 0;
+            });
+            tempArray2.push({
+                name: name,
+                global_sales: publisherGlobalSales,
+                eu_sales: publisherEuropeSales,
+                na_sales: publisherNorthAmericanSales,
+                jp_sales: publisherJapanSales,
+                other_sales: publisherOtherSales,
+                children: tempArray[name]
+            });
+        }
+
+        //load the data from the temporal array to convert it to it's final array
+        dataParsedArray.children.push({
+            name: object.name,
+            global_sales: roundToNumber(globalSales),
+            eu_sales: roundToNumber(europeSales),
+            na_sales: roundToNumber(northAmericanSales),
+            jp_sales: roundToNumber(japanSales),
+            other_sales: roundToNumber(otherSales),
+            children: tempArray2
+        });
+    });
+    return dataParsedArray;
+}
+
+function consoleStackByPlatform(array, key = 'platform') {
+    //default to 'platform' if platform key is not provided
+
+    tempArray = []; //een tijdelijke tussen array 
+    globalSales = 0 // For counting the total number of sales
+    dataParsedArray = { //de uiteindelijke array
+        name: 'Game Sales',
+        children: []
+    };
+    if(consoles.length > 0) {
+        consoles = [];
+        }
+
+    
+
+    //check every object within the array and store it in an temporal array
+    array.forEach(function (object) {
+        
+         !isNaN(object.global_sales) ? globalSales += object.global_sales : 0;
+        if (!tempArray[object[key]]) {
+            tempArray[object[key]] = [];
+        }
+        tempArray[object[key]].push(object);
+    });
+    dataParsedArray.global_sales = roundToNumber(globalSales);
+
+    //load the data from the temporal array to convert it to it's final array
+    for (key in tempArray) {
+        if(key == colorSetting.data.console) {
+            dataParsedArray.children.push({
+                name: key,
+                children: tempArray[key]
+            });
+        }
+        consoles.push(key);
+    }
+
+    return dataParsedArray;
+}
+
+function consoleStackByPublisher(array, key = 'publisher') {
+    //default to 'publisher' if publisher key is not provided
+
+    currentSortArray = [];
+    dataParsedArray = {
+        name: 'Game Sales',
+        global_sales : array.global_sales,
+        children: []
+    };
+    //check every object within the array and store it in an temporal array
+    array.children.forEach(function (object) {
+        tempArray = [];
+        globalSales = 0;
+        europeSales = 0;
+        northAmericanSales = 0;
+        japanSales = 0;
+        otherSales = 0;
+
+        object.children.forEach(function (child) {
+            globalSales += child.global_sales;
+            europeSales += child.eu_sales;
+            northAmericanSales += child.na_sales;
+            japanSales += child.jp_sales;
+            otherSales += child.other_sales;
+            if (!tempArray[child[key]]) {
+                tempArray[child[key]] = [];
+            }
+            tempArray[child[key]].push(child);
+        });
+        //convert the date from a 1st temporal array to a 2nd array
+        var tempArray2 = [];
+        for (name in tempArray) {
+            publisherGlobalSales = 0;
+            publisherEuropeSales = 0;
+            publisherNorthAmericanSales = 0;
+            publisherJapanSales = 0;
+            publisherOtherSales = 0;
+
+            tempArray[name].forEach((game) => {
+                !isNaN(game.global_sales) ? publisherGlobalSales += game.global_sales : 0;
+                !isNaN(game.eu_sales) ? publisherEuropeSales += game.eu_sales : 0;
+                !isNaN(game.na_sales) ? publisherNorthAmericanSales += game.na_sales : 0;
+                !isNaN(game.jp_sales) ? publisherJapanSales += game.jp_sales : 0;
+                !isNaN(game.other_sales) ? publisherOtherSales += game.other_sales : 0;
             });
 
             tempArray2.push({
                 name: name,
                 global_sales: publisherGlobalSales,
+                eu_sales: publisherEuropeSales,
+                na_sales: publisherNorthAmericanSales,
+                jp_sales: publisherJapanSales,
+                other_sales: publisherOtherSales,
                 children: tempArray[name]
             });
         }
@@ -280,6 +424,57 @@ function stackByPublisher(array, key = 'publisher') {
             children: tempArray2
         });
     });
+    return dataParsedArray;
+}
+
+function stackByPublisherSimple(array, key = 'platform') {
+    //default to 'platform' if platform key is not provided
+
+    globalSales = 0;
+
+    if(consoles.length > 0) {
+        consoles = [];
+        }
+    globalSalesPublisher = [];
+    europelSalesPublisher = [];
+    northAmericanSalesPublisher = [];
+    JapanSalesPublisher = [];
+    otherSalesPublisher = [];
+
+    dataParsedArray = { //de uiteindelijke array
+        name: 'Game Sales',
+        children: []
+    };
+
+    //check every object within the array and store it in an temporal array
+    array.forEach(function (object) {
+        if(globalSalesPublisher[object.platform] == undefined) {
+            globalSalesPublisher[object.platform] = 0;
+            europelSalesPublisher[object.platform] = 0;
+            northAmericanSalesPublisher[object.platform] = 0;
+            JapanSalesPublisher[object.platform] = 0;
+            otherSalesPublisher[object.platform] = 0;
+        }
+        !isNaN(object.global_sales) ? globalSalesPublisher[object.platform] += object.global_sales : 0;
+        !isNaN(object.eu_sales) ? europelSalesPublisher[object.platform] += object.eu_sales : 0;
+        !isNaN(object.na_sales) ? northAmericanSalesPublisher[object.platform] += object.na_sales : 0;
+        !isNaN(object.jp_sales) ? JapanSalesPublisher[object.platform] += object.jp_sales : 0;
+        !isNaN(object.other_sales) ? otherSalesPublisher[object.platform] += object.other_sales : 0;
+        !isNaN(object.global_sales) ? globalSales += object.global_sales : 0;
+    });
+    dataParsedArray.global_sales = roundToNumber(globalSales);
+    //load the data from the temporal array to convert it to it's final array
+    for (key in globalSalesPublisher) {
+        consoles.push(key);
+        dataParsedArray.children.push({
+            name: key,
+            global_sales: globalSalesPublisher[key],
+            eu_sales: europelSalesPublisher[key],
+            na_sales: northAmericanSalesPublisher[key],
+            jp_sales: northAmericanSalesPublisher[key],
+            other_sales: otherSalesPublisher[key]
+        });
+    }
     return dataParsedArray;
 }
 
@@ -309,14 +504,47 @@ function drawCanvas() {
                 };
                 parsedData.push(object);
             });
-
-            parsedData = stackByPlatform(parsedData); //stack the data by platform
-            parsedData = stackByPublisher(parsedData); //stack the data has been stacked by platform also bij Publisher
+            
+            if(colorSetting.data.type == 'global-all') {
+                parsedData = stackByPlatform(parsedData); //stack the data by platform
+                parsedData = stackByPublisher(parsedData); //stack the data has been stacked by platform also bij Publisher
+            } else if (colorSetting.data.type == 'publisher'){
+                parsedData = stackByPublisherSimple(parsedData);
+            } else if (colorSetting.data.type == 'console') {
+                parsedData = consoleStackByPlatform(parsedData);
+                parsedData = consoleStackByPublisher(parsedData);
+            }
+            consoles = consoles.sort();
+            changeConsolesSelect();
 
             drawCircle(parsedData, colorSetting); //call the drawcircle function, created by the great Mike Bostock with some extra juicy cherry's from my garden on top of that cake :p
 
         });
 
+}
+
+function changeConsolesSelect() {
+    consoles.forEach((consoleName) => {
+        $('#console-select').append('<option value="' + consoleName + '">' + consoleName + '</option>');
+    });
+}
+
+function changeConsole() {
+    colorSetting.data.console = $('#console-select').val();
+    localStorage.setItem('colorSettings', JSON.stringify(colorSetting));
+}
+
+function setDisplay(display) {
+    if(display == 'console' && colorSetting.data.console == '') {
+        colorSetting.data.console = $('#console-select').val();
+        if(colorSetting.data.console == '') {
+            alert('Please set console first');
+        }   
+    } else {
+        colorSetting.data.type = display;
+        localStorage.setItem('colorSettings', JSON.stringify(colorSetting));
+        drawCanvas();
+    }
 }
 
 // Round to a certain amount of numbers behind the comma, default: 2

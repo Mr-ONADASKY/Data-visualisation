@@ -20,6 +20,15 @@
         <button id="menu-button" class="ui-button ui-widget ui-corner-all ui-button-icon-only menu-button" title="Button with icon only">
             <span class="ui-icon ui-icon-gear"></span> Button with icon only
         </button>
+    </div>
+        <div class="data-selection"> 
+            <ul>
+                <li><button onclick="setDisplay('global-all')">Display Everything (performance issues)</button></li>
+                <li><button onclick="setDisplay('publisher')">Display publisher</button></li>
+                <li><button onclick="setDisplay('console')">Display console</button></li>
+                <select name="console-select" id="console-select" onchange="changeConsole()"></select>
+            </ul>
+        </div>
         <div class="box-container" id="dialog" title="Settings">
             <div id="accordion">
                 <h3>Color Range Selection</h3>
@@ -57,9 +66,9 @@
                         <div id="swatch" class="ui-widget-content ui-corner-all color-swatch"></div>
                     </div>
                 </div>
+                <h3>Data selection</h3>
             </div>
         </div>
-    </div>
 </body>
 <script src="js/d3-circle-packing.js"></script>
 <script src="js/index.js"></script>
