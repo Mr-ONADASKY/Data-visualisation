@@ -22,14 +22,16 @@ are also some options for changing the background as well as the stack colors.
 
 ![](media/763e280030b7df8ee924392528ebd69a.png)
 
+2nd assignment:
 
+A.1 exploratory \|\| B Auditive \|\| A.2 Interactive
 
-2nd assignement:
+A simple audiovisual representation for the price movement for Bitcoin, Ethereum
+and Ripple
 
-A. 1 exploratory || B Auditive || A.2 Interactive
+3th assignment
 
-A simple audiovisual representation for the price movement for Bitcoin, Ethereum and Ripple
+A.1 exploratory \|\| A.2 Linear \|\| A.x Node-based
 
-
-
-TODO: A.1 explanatory || A.2 Static && A.2 Linear || A.x 3D && A.x Node-based
+TODO: A.1 explanatory \|\| A.2 Static && A.2 Linear \|\| A.x 3D && A.x
+Node-based
