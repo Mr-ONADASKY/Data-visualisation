@@ -20,11 +20,20 @@
         <button id="menu-button" class="ui-button ui-widget ui-corner-all ui-button-icon-only menu-button" title="Button with icon only">
             <span class="ui-icon ui-icon-gear"></span> Button with icon only
         </button>
+    </div>
+        <div class="data-selection"> 
+            <ul>
+                <li><button onclick="setDisplay('global-all')">Display Everything (performance issues)</button></li>
+                <li><button onclick="setDisplay('publisher')">Display publisher</button></li>
+                <li><button onclick="setDisplay('console')">Display console</button></li>
+                <select name="console-select" id="console-select" onchange="changeConsole()"></select>
+            </ul>
+        </div>
         <div class="box-container" id="dialog" title="Settings">
             <div id="accordion">
                 <h3>Color Range Selection</h3>
                 <div>
-                    <div class="left-side color-slide-container">
+                    <div class="start-color color-slide-container">
                         <h3>Start color</h3>
                         <div id="red-1" class="color-slider red-slider"></div>
                         <div id="green-1" class="color-slider green-slider"></div>
@@ -32,12 +41,19 @@
 
                         <div id="swatch-1" class="ui-widget-content ui-corner-all color-swatch"></div>
                     </div>
-                    <div class="right-side color-slide-container">
+                    <div class="stop-color color-slide-container">
                         <h3>Stop color</h3>
                         <div id="red-2" class="color-slider red-slider"></div>
                         <div id="green-2" class="color-slider green-slider"></div>
                         <div id="blue-2" class="color-slider blue-slider"></div>
                         <div id="swatch-2" class="ui-widget-content ui-corner-all color-swatch"></div>
+                    </div>
+                    <div class="end-color color-slide-container">
+                        <h3>Stop color</h3>
+                        <div id="red-3" class="color-slider red-slider"></div>
+                        <div id="green-3" class="color-slider green-slider"></div>
+                        <div id="blue-3" class="color-slider blue-slider"></div>
+                        <div id="swatch-3" class="ui-widget-content ui-corner-all color-swatch"></div>
                     </div>
                 </div>
                 <h3>Layout selection</h3>
@@ -50,11 +66,11 @@
                         <div id="swatch" class="ui-widget-content ui-corner-all color-swatch"></div>
                     </div>
                 </div>
+                <h3>Data selection</h3>
             </div>
         </div>
-    </div>
 </body>
-<script src="js/index.js"></script>
 <script src="js/d3-circle-packing.js"></script>
+<script src="js/index.js"></script>
 
 </html>
