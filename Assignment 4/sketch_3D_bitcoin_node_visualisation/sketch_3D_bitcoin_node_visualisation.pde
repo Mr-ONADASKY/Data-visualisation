@@ -6,45 +6,34 @@
     https://github.com/mledoze/countries
 */
 
-float longitude = 144.9631;
-float latitude = -37.8136;
+float worldAngle = 0; // Which angle the world is currently rotated at
+float worldRadius = 200; // The radius from the sphere that represents the world
 
-float worldAngle = 0;
-float worldRadius = 200;
+JSONObject jsonBitcoinNodes; // Object for the bitcoinNodesJson
+JSONObject jsonNitcoinNodesList; // Object for the sublist with all the nodes within the jsonBitcoinNodes
 
-Table table;
+JSONArray countries; // List with all the countries
 
-JSONObject jsonBitcoinNodes;
-JSONObject jsonNitcoinNodesList;
+PImage earth; // PImage from the earth
+PShape globe; // PShape for the sphere that represents the globe
 
-JSONArray countries;
-
-PImage earth;
-PShape globe;
-
-bitcoinNode[] bitcoinNodes;
-
-JSONObject nodesMemoryArray;
+JSONObject nodesMemoryArray; // Memory array for all the nodes
 
 void setup() {
   
-  size(800, 800, P3D);
+  size(600, 600, P3D);
   earth = loadImage("Earth.jpg");
-   //table = loadTable("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_day.csv", "header");
-   //table = loadTable("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.csv", "header");
    
    jsonBitcoinNodes = loadJSONObject("BitcoinNodes.json");
    jsonNitcoinNodesList = jsonBitcoinNodes.getJSONObject("nodes");
    
-   //bitcoinNodes = new bitcoinNode[jsonNitcoinNodesList.keys().size()];
-   
    countries = loadJSONArray("Countries.json");
-   
-  // println(jsonNitcoinNodesList, jsonNitcoinNodesList.keys());
+
    Object[] bitcoinNodesKeys = jsonNitcoinNodesList.keys().toArray();
    
    nodesMemoryArray = new JSONObject();
    
+   // Find all the coordinates for the countries from the npdes and count the amount of node for each country
    for(int index = 0; index < bitcoinNodesKeys.length; index++) {
      JSONArray currentBitcoinNode = jsonNitcoinNodesList.getJSONArray(bitcoinNodesKeys[index].toString());
      if(currentBitcoinNode.get(7) instanceof String) {
@@ -73,7 +62,12 @@ void setup() {
 }
 
 void draw(){
+  // Draw the sphere
     background(51);
+    textSize(25);
+    textAlign(CENTER,CENTER);
+    text("Amount of bitcoin nodes in each country", width * .5, 20);
+    
     translate(width * .5, height * .5);
     rotateY(worldAngle);
     worldAngle += 0.02;
@@ -82,12 +76,13 @@ void draw(){
     fill(200);
     noStroke();
     shape(globe);
-    //Object[] bitcoinNodesKeys = jsonNitcoinNodesList.keys().toArray();
+    
+    
+    
+    // Draw each block that represents the amount of nodes for eacht country
     Object[] bitcoinNodesKeys = nodesMemoryArray.keys().toArray();
     for(int index = 0; index < bitcoinNodesKeys.length; index++) {
      JSONObject currentBitcoinNode = nodesMemoryArray.getJSONObject(bitcoinNodesKeys[index].toString());
-     // bitcoinNodesKeys[index]
-       //println(currentBitcoinNode.get(7));
 
       float latitude = currentBitcoinNode.getFloat("lon");
       float longitude = currentBitcoinNode.getFloat("lat");
@@ -112,8 +107,5 @@ void draw(){
       box(height, 5, 5);
       popMatrix();
     }
-    
-    
-    
-    
+
 }
